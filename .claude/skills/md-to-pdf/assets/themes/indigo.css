@@ -1,0 +1,12 @@
+/* Theme: indigo, dark indigo + vivid violet */
+:root {
+  --navy: #1e1b4b;
+  --teal: #4f46e5;
+  --green-dark: #312e81;
+  --green-mid: #4f46e5;
+  --green-light: #e0e7ff;
+  --green-lighter: #eef2ff;
+  --body: #4a5568;
+  --footer: #94a3b8;
+  --rule: #312e81;
+}

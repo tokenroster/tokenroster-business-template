@@ -1,0 +1,259 @@
+/* Default one-pager theme — Helvetica, navy + teal, green tables.
+   This is a working example palette, not a brand spec. Once you have
+   marketing/brand/brand-guidelines.md, either replace these tokens with
+   your brand's colors/typeface or point at one of assets/themes/*.css.
+   Pick ONE accent treatment and use it consistently, don't let every new
+   document invent its own color scheme. */
+
+:root {
+  --navy: #0d1b2a;
+  --teal: #0e7c7b;
+  --green-dark: #0a5c5b;
+  --green-mid: #0e7c7b;
+  --green-light: #e6f5f4;
+  --green-lighter: #f3faf9;
+  --body: #4a5568;
+  --footer: #94a3b8;
+  --rule: #0a5c5b;
+}
+
+@page {
+  size: Letter;
+  margin: 0.7in 0.8in;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: var(--body);
+  font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8.5pt;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.document {
+  max-width: 100%;
+}
+
+/* Document header */
+.document > h1:first-child {
+  font-size: 26pt;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  color: var(--navy);
+  line-height: 1.1;
+  text-align: left;
+  page-break-after: avoid;
+}
+
+.document > h1:first-child + h3 {
+  font-size: 13pt;
+  font-weight: 400;
+  color: var(--teal);
+  margin: 0 0 6px;
+  line-height: 1.35;
+  text-align: left;
+  page-break-after: avoid;
+}
+
+.document > h1:first-child + h3 + p {
+  font-size: 9pt;
+  color: var(--body);
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--rule);
+}
+
+.document > h1:first-child + h3 + p strong {
+  font-weight: 400;
+  color: var(--body);
+}
+
+/* Section headings */
+h2 {
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 7px 0 3px;
+  padding: 0;
+  border: none;
+  text-transform: capitalize;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 7px 0 3px;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0 0 3px;
+  color: var(--body);
+  font-size: 8.5pt;
+}
+
+em {
+  color: var(--teal);
+  font-style: italic;
+  font-weight: 400;
+}
+
+strong {
+  font-weight: 700;
+  color: var(--body);
+}
+
+a {
+  color: var(--teal);
+  text-decoration: none;
+}
+
+hr {
+  border: none;
+  margin: 4px 0;
+  height: 0;
+}
+
+/* Stats / callout — highlighted traction block */
+blockquote {
+  margin: 4px 0;
+  padding: 7px 12px;
+  background: var(--green-light);
+  border: 1px solid #b8dedc;
+  border-left: 4px solid var(--green-dark);
+  border-radius: 4px;
+  page-break-inside: avoid;
+}
+
+blockquote p {
+  margin: 0;
+  font-size: 8.5pt;
+  font-style: normal;
+  color: var(--green-dark);
+  font-weight: 600;
+}
+
+/* Tables — dark green header, alternating light green rows */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2px 0 5px;
+  font-size: 8.5pt;
+  page-break-inside: avoid;
+  border: 1px solid #b8dedc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+thead th {
+  background: var(--green-dark);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 10pt;
+  text-align: left;
+  padding: 5px 8px;
+  border: 1px solid var(--green-dark);
+}
+
+tbody td {
+  padding: 4px 8px;
+  border: 1px solid #c5e8e6;
+  vertical-align: top;
+  color: var(--body);
+  font-size: 8.5pt;
+}
+
+tbody tr:nth-child(odd) td {
+  background: var(--green-light);
+}
+
+tbody tr:nth-child(even) td {
+  background: var(--green-lighter);
+}
+
+tbody td:first-child {
+  font-weight: 500;
+  color: var(--navy);
+  width: auto;
+}
+
+tbody td strong {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+/* Step / feature labels */
+p > strong:first-child {
+  font-weight: 700;
+  color: var(--body);
+}
+
+/* CTA contact line — matches a paragraph containing a link to your own
+   domain, so the closing contact line gets accent styling. Replace
+   {{COMPANY_DOMAIN}} with your actual domain (e.g. example.com). */
+.document p:has(a[href*='{{COMPANY_DOMAIN}}']) {
+  color: var(--teal);
+  font-size: 8.5pt;
+}
+
+.document p:has(a[href*='{{COMPANY_DOMAIN}}']) strong {
+  color: var(--teal);
+  font-weight: 400;
+}
+
+/* Document footer divider */
+.document > p:last-child em:only-child,
+.document > p:last-child:has(em) {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 2px solid var(--rule);
+  font-size: 8pt;
+  color: var(--footer);
+}
+
+.document > p:last-child em {
+  color: var(--footer);
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0 0 8px;
+  padding-left: 18px;
+  font-size: 8.5pt;
+  color: var(--body);
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+li::marker {
+  color: var(--body);
+}
+
+/* Page breaks */
+h2, h3, blockquote, table {
+  break-inside: avoid;
+}
+
+h2 + p,
+h2 + table {
+  break-before: avoid;
+}

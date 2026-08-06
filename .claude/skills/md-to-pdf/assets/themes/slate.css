@@ -1,0 +1,12 @@
+/* Theme: slate, near-black + sky blue */
+:root {
+  --navy: #0f172a;
+  --teal: #0ea5e9;
+  --green-dark: #0369a1;
+  --green-mid: #0ea5e9;
+  --green-light: #e0f2fe;
+  --green-lighter: #f0f9ff;
+  --body: #4a5568;
+  --footer: #94a3b8;
+  --rule: #0369a1;
+}

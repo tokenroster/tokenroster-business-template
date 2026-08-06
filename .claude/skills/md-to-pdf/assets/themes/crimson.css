@@ -1,0 +1,12 @@
+/* Theme: crimson, near-black + deep rose */
+:root {
+  --navy: #1c0a0a;
+  --teal: #be123c;
+  --green-dark: #881337;
+  --green-mid: #be123c;
+  --green-light: #fff1f2;
+  --green-lighter: #fff5f6;
+  --body: #4a5568;
+  --footer: #94a3b8;
+  --rule: #881337;
+}

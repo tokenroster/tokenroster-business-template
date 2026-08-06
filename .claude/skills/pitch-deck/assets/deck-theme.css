@@ -1,0 +1,242 @@
+/* Default deck theme — paper/ink surfaces, one cobalt accent, Space
+   Grotesk/Outfit/IBM Plex Mono. This is a working example, not a brand
+   spec. Once you have marketing/brand/brand-guidelines.md, replace the
+   tokens below with your own. If you change the font families, also
+   update the Google Fonts <link> in scripts/deck-kit.js so the right
+   weights load. Keep it to one accent color, that's the point of this
+   engine: hierarchy through opacity, not extra hues. */
+@page { size: 13.333in 7.5in; margin: 0; }
+
+:root {
+  --paper: #f1ede3;
+  --paper-section: #e9e4d9;
+  --surface: #ffffff;
+  --ink: #1a1a17;
+  --ink-secondary: #5c5b54;
+  --ink-tertiary: #86847d;
+  --accent: #243c7a;
+  --accent-hover: #2e4a93;
+  --border: #dad5c9;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font-body); color: var(--ink); }
+
+.slide {
+  width: 13.333in;
+  height: 7.5in;
+  padding: 0.55in 0.9in 0.5in;
+  background: var(--paper);
+  position: relative;
+  page-break-after: always;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.slide:last-child { page-break-after: auto; }
+
+/* The title sits right under the eyebrow, pinned near the top of every
+   slide. Everything else (body()) fills and centers in the remaining
+   space below it, so content spreads across the page without the
+   header drifting down. */
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4in;
+}
+.slide-title-page .slide-body { align-items: center; text-align: center; }
+
+.eyebrow {
+  font-size: 11pt;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+.corner-mark { position: absolute; top: 0.45in; right: 0.7in; width: 0.58in; height: 0.58in; }
+.corner-mark svg { display: block; width: 100%; height: 100%; }
+.slide-title-page .corner-mark { display: none; }
+
+.slide-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 38pt;
+  line-height: 1.22;
+  color: var(--ink);
+  text-align: center;
+  margin: 0.35in auto 0;
+  max-width: 10.5in;
+}
+
+.slide-footer {
+  position: absolute;
+  bottom: 0.32in;
+  left: 0.9in;
+  right: 0.9in;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 8.5pt;
+  color: var(--ink-tertiary);
+}
+
+.accent-line {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--accent);
+  font-size: 18pt;
+  margin: 0;
+}
+.accent-line.center { text-align: center; }
+
+/* ---- title slide ---- */
+.title-word { width: 5.2in; }
+.title-word svg { display: block; width: 100%; height: auto; }
+.title-tagline {
+  font-family: var(--font-body);
+  color: var(--ink-secondary);
+  font-size: 22pt;
+  max-width: 9in;
+  line-height: 1.4;
+  margin: 0;
+}
+.title-presenter { font-family: var(--font-mono); font-size: 13pt; color: var(--ink-tertiary); margin: 0; }
+
+/* ---- bullet lists ---- */
+.brand-list { list-style: none; margin: 0; padding: 0; max-width: 10.8in; }
+.brand-list li {
+  position: relative;
+  font-size: 19pt;
+  color: var(--ink-secondary);
+  line-height: 1.55;
+  padding-left: 0.32in;
+}
+.brand-list li + li { margin-top: 0.3in; }
+.brand-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.19in;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.brand-list strong { color: var(--ink); font-weight: 600; }
+
+/* ---- split layouts ---- */
+.split-60-40 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 0.6in; align-items: center; width: 100%; }
+.split-55-45 { display: grid; grid-template-columns: 1.15fr 1fr; gap: 0.6in; align-items: center; width: 100%; }
+
+.chart-frame { display: flex; align-items: center; justify-content: center; }
+.chart { width: 100%; height: auto; }
+.chart-title { font-family: var(--font-body); font-size: 15px; fill: var(--ink-secondary); }
+.chart-grid { stroke: var(--border); stroke-width: 1; }
+.chart-line { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.chart-dot { fill: var(--accent); }
+.chart-bar { fill: var(--accent); }
+.chart-bar-value { font-family: var(--font-mono); font-size: 16px; fill: var(--ink); font-weight: 600; }
+.chart-axis-label { font-family: var(--font-body); font-size: 13px; fill: var(--ink-tertiary); }
+
+/* ---- tam/sam/som bars (market sizing) ---- */
+.tam-bars { display: flex; flex-direction: column; gap: 0.28in; width: 100%; max-width: 11in; margin: 0 auto; }
+.tam-bar-row { display: flex; flex-direction: column; gap: 0.08in; }
+.tam-bar-head { display: flex; justify-content: space-between; align-items: baseline; }
+.tam-bar-label { font-family: var(--font-display); font-weight: 500; font-size: 16pt; color: var(--ink); }
+.tam-bar-value { font-family: var(--font-mono); font-weight: 600; font-size: 15pt; color: var(--ink); }
+.tam-bar-track { width: 100%; height: 0.42in; background: var(--paper-section); border-radius: 6px; overflow: hidden; }
+.tam-bar-fill { height: 100%; border-radius: 6px; background: var(--accent); }
+.tam-bar-fill.tam { opacity: 0.28; }
+.tam-bar-fill.sam { opacity: 0.6; }
+.tam-bar-fill.som { opacity: 1; }
+.tam-bar-desc { font-size: 12.5pt; color: var(--ink-secondary); margin: 0; }
+
+/* ---- how-it-works flow ---- */
+.flow-col { display: flex; flex-direction: column; align-items: stretch; gap: 0.14in; }
+.flow-box {
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15pt;
+  text-align: center;
+  padding: 0.22in 0.24in;
+  border-radius: 8px;
+}
+.flow-arrow { text-align: center; color: var(--accent); font-size: 14pt; line-height: 1; }
+
+/* ---- team ---- */
+.row-2-people { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7in; width: 100%; }
+.person-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.person-photo { width: 1.8in; height: 1.8in; border-radius: 50%; object-fit: cover; margin-bottom: 0.22in; box-shadow: 0 1px 3px rgba(26,26,23,0.18); }
+.person-name { font-family: var(--font-display); font-weight: 500; font-size: 19pt; color: var(--ink); }
+.person-role { font-family: var(--font-body); font-weight: 500; font-size: 14pt; color: var(--accent); margin: 0.05in 0 0.16in; }
+.person-card p { font-size: 13pt; color: var(--ink-secondary); line-height: 1.5; margin: 0; max-width: 4.9in; }
+
+/* ---- partners (own slide) ---- */
+.partners-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4in; width: 100%; }
+.partners-grid.grid-2 { grid-template-columns: repeat(2, 1fr); max-width: 8.4in; margin: 0 auto; }
+.card.partner-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.32in 0.3in;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.card.partner-card p { font-size: 13pt; color: var(--ink-secondary); line-height: 1.55; margin: 0; }
+.card.partner-card strong { display: block; color: var(--ink); font-family: var(--font-display); font-weight: 500; font-size: 15pt; margin-bottom: 0.12in; }
+
+/* ---- ask ---- */
+.ask-contact { text-align: center; font-family: var(--font-mono); font-size: 13pt; color: var(--ink-tertiary); margin: 0; }
+
+/* ---- projects (portfolio/deals grid) ---- */
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4in; width: 100%; }
+.card.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.32in 0.3in;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.card-logo-frame { height: 1.05in; width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 0.22in; }
+.card-logo-frame.on-dark { background: var(--ink); border-radius: 8px; }
+.card-logo-frame.on-dark .card-logo { max-height: 78%; max-width: 82%; }
+.card-logo { max-height: 100%; max-width: 100%; object-fit: contain; }
+.card.project-card strong { display: block; color: var(--ink); font-family: var(--font-display); font-weight: 500; font-size: 15pt; margin-bottom: 0.12in; }
+.card.project-card p { font-size: 13pt; color: var(--ink-secondary); line-height: 1.55; margin: 0; }
+
+/* ---- logo strip (e.g. capital routes under Partners) ---- */
+.logo-strip { display: flex; flex-direction: column; align-items: center; gap: 0.14in; }
+.logo-strip-label {
+  font-family: var(--font-mono);
+  font-size: 12pt;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.logo-strip-badges { display: flex; align-items: center; justify-content: center; gap: 0.4in; }
+.logo-strip-badge {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  height: 0.8in;
+  padding: 0.12in 0.3in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-strip-badge img { max-height: 100%; max-width: 2in; object-fit: contain; }
