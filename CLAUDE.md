@@ -63,6 +63,20 @@ Rendered as a PDF (HTML + Chromium), not PowerPoint, this environment has no Lib
 
 ---
 
+## TokenRoster sync
+
+This template can push a completed document (e.g. `setup-questionnaire.md`, or a business
+plan derived from it) to the company's own TokenRoster listing. Follow the full process in
+`.claude/skills/tokenroster-sync/SKILL.md`.
+
+Requires a one-time manual step outside this repo: TokenRoster has no API/MCP way to create
+a company listing, only to attach documents to one that already exists. The user must sign
+up and create their listing at tokenroster.com's web app first, then generate a personal
+access token at `/manage/tokens` and put it in `.env` as `TOKENROSTER_API_KEY` (see
+`.env.example`). MCP server config lives in `.mcp.json` at the repo root.
+
+---
+
 ## README files
 
 Every folder has a `README.md`. Keep it current.

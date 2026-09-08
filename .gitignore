@@ -4,3 +4,11 @@ node_modules/
 
 .DS_Store
 Thumbs.db
+
+# Secrets
+.env.*
+!.env.example
+*.pem
+*.key
+.claude/settings.local.json
+.mcp*

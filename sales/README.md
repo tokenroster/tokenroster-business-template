@@ -12,4 +12,4 @@ External-facing collateral: documents handed to prospects, investors, partners, 
 
 `emails/` and `emails/drafts/` hold sales outreach. See `sales/AGENT.md` for the convention on whether draft files are kept or deleted once sent.
 
-Add a `pitch-deck/` subfolder once you have deck content (a markdown source, a `generation/` build script, and `output/` for rendered PDFs), see `.claude/skills/pitch-deck/SKILL.md` for the expected layout, and document it here when you do.
+`pitch-deck/` holds deck content: `generation/` for the build script and deck-specific assets, `output/` for rendered PDFs. Add the markdown content source (`{{COMPANY}}_PitchDeck.md`) and `generation/generate-deck.js` when you write your first deck, see `.claude/skills/pitch-deck/SKILL.md` for the expected layout.

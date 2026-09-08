@@ -19,6 +19,17 @@ visual engine are separate, this skill owns the engine (`scripts/deck-kit.js`,
 
 ---
 
+## Step 0 — Verify prerequisites
+
+This skill has its own dependencies, separate from md-to-pdf's, installed once from this
+skill's `scripts/` folder:
+
+1. Node.js 18+ installed (`node -v`)
+2. `npm install` (installs `playwright` per `package.json`)
+3. `npx playwright install chromium` (first run only)
+
+---
+
 ## Step 1 — Read the source of truth first
 
 Before writing or editing a single slide:
@@ -134,5 +145,5 @@ Fix and re-screenshot only the slides that changed. Do not declare the deck done
 
 ## Related skills
 
-- [md-to-pdf](../md-to-pdf/SKILL.md) — this skill's `deck-kit.js` reuses its already-installed Playwright/Chromium install rather than a second one.
+- [md-to-pdf](../md-to-pdf/SKILL.md) — same rendering approach (HTML + Chromium via Playwright), but each skill installs its own copy so either can be copied into another project independently.
 - [one-pager](../one-pager/SKILL.md) — same brand source of truth, different output shape (single page, not a slide deck).

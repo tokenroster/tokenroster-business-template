@@ -1,0 +1,15 @@
+{
+  "_readme": "Copy this file to .claude/settings.local.json (already gitignored, see .gitignore) and adjust to your own workflow. It layers personal overrides on top of the team-wide .claude/settings.json — merge into these arrays, don't replace them wholesale. Note: guard-read-paths.js and guard-bash-paths.js in .claude/settings.json still restrict every tool call to paths inside the project root regardless of what you allow here.",
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git show*)",
+      "Bash(npm install)",
+      "Bash(npm run *)",
+      "Bash(node *)"
+    ]
+  }
+}

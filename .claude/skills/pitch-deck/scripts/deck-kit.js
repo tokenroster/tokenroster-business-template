@@ -237,9 +237,7 @@ ${slidesHtmlArray.join('\n')}
 }
 
 function getChromium() {
-  // Reuses the browser already installed for the md-to-pdf skill instead
-  // of a second npm/playwright-browser download.
-  return require(path.join(ROOT, '.claude', 'skills', 'md-to-pdf', 'scripts', 'node_modules', 'playwright')).chromium;
+  return require('playwright').chromium;
 }
 
 async function renderPdf(html, outPath) {

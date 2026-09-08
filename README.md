@@ -26,7 +26,8 @@ template/
 │   ├── AGENT.md                   Persona template
 │   ├── README.md
 │   ├── 1-pager/output/
-│   └── emails/drafts/
+│   ├── emails/drafts/
+│   └── pitch-deck/generation/assets/, pitch-deck/output/
 └── .claude/skills/          Reusable Claude skill files
     ├── README.md
     ├── one-pager/              Drafts audience-specific one-pager markdown
@@ -46,9 +47,9 @@ The three included skills (`one-pager`, `md-to-pdf`, `pitch-deck`) are generic d
 4. **Decide if you need a shared numbers file.** If stats, pricing, or contact info will appear in more than one document, create one (e.g. `key-numbers.md` at the repo root) per the pattern in `CLAUDE.md`'s "Key numbers" section. Skip this if it doesn't apply yet.
 5. **Write `marketing/brand/brand-guidelines.md`** before producing any real sales or marketing collateral, it doesn't exist yet in this template. `marketing/brand/README.md` describes what it should contain.
 6. **Decide on house style rules** (e.g. em dash policy, file naming prefix for external docs) and either keep or delete the bracketed suggestions in `CLAUDE.md` and each `AGENT.md`.
-7. **Set up the included skills before first use.** `md-to-pdf`: run `npm install` inside `.claude/skills/md-to-pdf/scripts/`, then `npx playwright install chromium` from the same folder. `pitch-deck`: add `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg`, and fill in `COMPANY_NAME` near the top of `.claude/skills/pitch-deck/scripts/deck-kit.js`. `one-pager` needs no setup beyond its `{{PLACEHOLDER}}`s.
+7. **Set up the included skills before first use.** `md-to-pdf`: run `npm install` inside `.claude/skills/md-to-pdf/scripts/`, then `npx playwright install chromium` from the same folder. `pitch-deck`: same two commands inside `.claude/skills/pitch-deck/scripts/` (it has its own separate `package.json`, not shared with md-to-pdf), plus add `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg`, and fill in `COMPANY_NAME` near the top of `.claude/skills/pitch-deck/scripts/deck-kit.js`. `one-pager` needs no setup beyond its `{{PLACEHOLDER}}`s.
 8. **Delete every blockquote setup-note** (like this section and the ones at the top of `CLAUDE.md` and each `AGENT.md`/`SKILL.md`) once its instructions are done.
-9. **Remove unused empty folders** (`business-plan/`, `executive-summary/`, `competitive-analysis/`, `website-copy/`, `1-pager/output/`, `emails/drafts/`) if they don't apply yet, or leave them, each has a `.gitkeep` so git tracks the empty directory until real files land.
+9. **Remove unused empty folders** (`business-plan/`, `executive-summary/`, `competitive-analysis/`, `website-copy/`, `1-pager/output/`, `emails/drafts/`, `pitch-deck/generation/assets/`, `pitch-deck/output/`) if they don't apply yet, or leave them, each has a `.gitkeep` so git tracks the empty directory until real files land.
 
 ## The pattern this template encodes
 
