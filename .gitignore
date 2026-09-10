@@ -11,4 +11,3 @@ Thumbs.db
 *.pem
 *.key
 .claude/settings.local.json
-.mcp*

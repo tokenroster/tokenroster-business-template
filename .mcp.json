@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "tokenroster": {
+      "type": "http",
+      "url": "https://tokenroster.com/api/mcp"
+    },
+    "tokenroster-manage": {
+      "type": "http",
+      "url": "https://tokenroster.com/api/manage/mcp",
+      "headers": {
+        "Authorization": "Bearer ${TOKENROSTER_API_KEY}"
+      }
+    }
+  }
+}
