@@ -30,13 +30,34 @@ entirely in Step 4.
 
 - **If it's already filled in** (every question has real content under it, not blank),
   skip straight to Step 2.
-- **If it's blank or partially blank**, don't dump all 15 questions on the user at once.
+- **Always start with Q0 (the domain), before any other question.** Ask it on its own,
+  record the answer, then:
+  - **If there's a live site**, read it with WebFetch before asking anything else: the
+    home page first, then whatever about/team, pricing, and contact pages it links to.
+    Also check the page source for a logo file (SVG preferred), color values (CSS custom
+    properties, repeated hex values), and fonts (Google Fonts links, `font-family`).
+  - Pre-fill every answer the site actually supports and tag each one
+    `(from website, confirm)`. Questions the site can usually answer: Q1 name, Q2
+    description, Q3 business model (stage only if stated), Q4 founder (about/team page),
+    Q5 whether a logo exists and where, Q6 colors, Q7 fonts, Q9 voice (inferred from
+    the copy), Q10 pricing and contact info, Q14 (same as Q1). Q8, Q11, Q12, and Q13
+    can't come from a website, always ask those.
+  - Only pre-fill what's on the page. Leave a question blank rather than guess, and say
+    in the tag when something is inferred rather than stated (e.g.
+    `(inferred from website copy, confirm)`).
+  - Show the user a short summary of what was pre-filled, then continue one question at
+    a time: first confirm or correct each pre-filled answer, then ask the unanswered
+    ones, in file order. Remove the tag once the user confirms an answer.
+  - **If there's no site yet**, or it can't be fetched, say so in one line and walk
+    through Q1 onward as normal.
+- **If it's blank or partially blank**, ask exactly one question per message, never more.
   Either:
   - Ask the user to fill it in directly (fastest if they want to think it through in an
     editor), then come back, or
-  - Walk through the sections conversationally (company basics, then brand, then key
-    numbers, then house style, then skill setup) and write their answers into the file
-    yourself as they respond, section by section.
+  - Walk through the unanswered questions conversationally, in file order, one question
+    at a time: ask a single question, wait for the answer, write it into the file under
+    that question, then ask the next. Never group questions, not even ones from the same
+    section, and never bundle a follow-up with the next question.
 - Q4 is optional: if the user names a real founder to anchor a persona, use that
   background in Step 4 instead of inventing one for that folder. If left blank, Claude
   invents a fitting expert for every persona.
@@ -52,7 +73,7 @@ From the answered questionnaire, resolve:
 | Placeholder | Comes from |
 |---|---|
 | `{{COMPANY}}` | Q1 (exact name/casing) |
-| `{{COMPANY_DOMAIN}}` | Company's domain, ask if not given (used in one-pager/pitch-deck headers) |
+| `{{COMPANY_DOMAIN}}` | Q0 (used in one-pager/pitch-deck headers) |
 | `{{STRATEGY_PERSONA_NAME}}` | Name generated in Step 4 (or Q4's named founder, if it applies to this folder) |
 | `{{MARKETING_PERSONA_NAME}}` | Name generated in Step 4 (or Q4's named founder, if it applies to this folder) |
 | `{{SALES_PERSONA_NAME}}` | Name generated in Step 4 (or Q4's named founder, if it applies to this folder) |
@@ -142,17 +163,18 @@ dependencies, adding logo SVGs) to the user, it's covered by that skill's own SK
 
 ---
 
-## Step 8 — Clean up placeholder scaffolding
+## Step 8 — Finish up, keep the skeleton intact
 
-- Per Q15, ask which of the unused empty folders (`strategy/business-plan/`,
-  `strategy/executive-summary/`, `strategy/competitive-analysis/`,
-  `marketing/website-copy/`, `sales/1-pager/output/`, `sales/emails/drafts/`,
-  `sales/pitch-deck/generation/assets/`, `sales/pitch-deck/output/`) to remove now versus
-  leave as placeholders (each has a `.gitkeep`, so leaving them is fine and reversible).
-  Don't delete folders the user didn't ask to remove.
-- Update each affected folder's `README.md` if a subfolder was removed or a naming
-  convention changed (e.g. the sales brand-prefix decision from Q12), per `CLAUDE.md`'s
-  README rule. Don't create new READMEs, only update the ones that already exist.
+- Never delete any file or folder of the skeleton project during setup. That includes
+  the empty placeholder folders (`strategy/business-plan/`, `strategy/executive-summary/`,
+  `strategy/competitive-analysis/`, `marketing/website-copy/`, `sales/1-pager/output/`,
+  `sales/emails/drafts/`, `sales/pitch-deck/generation/assets/`,
+  `sales/pitch-deck/output/`) and their `.gitkeep` files, the READMEs, `AGENT.md` files,
+  skills, and `setup-questionnaire.md` itself. Setup only edits text inside files and
+  adds new ones (`brand-guidelines.md`, `key-numbers.md`). Don't offer to remove anything.
+- Update each affected folder's `README.md` if a naming convention changed (e.g. the
+  sales brand-prefix decision from Q12), per `CLAUDE.md`'s README rule. Don't create new
+  READMEs, only update the ones that already exist.
 - Once every `{{PLACEHOLDER}}` is resolved repo-wide, delete the setup blockquote at the
   top of `README.md` and the "template/README.md" pointer line at the top of `CLAUDE.md`.
 

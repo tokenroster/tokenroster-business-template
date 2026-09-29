@@ -9,11 +9,27 @@ drafted, review the personas and say what's off, don't try to get everything rig
 this file first.
 
 The other sections (brand, key numbers, house style, skill setup) are separate facts
-Claude can't infer, answer those too.
+Claude can't infer from the company basics, answer those too (the website check below
+often covers the brand ones).
 
 Answer inline below each question (bullets, short prose, whatever's fastest).
 
+If Claude walks you through this file instead, it asks one question at a time, in order,
+and records each answer here before asking the next.
+
+Q0 comes first. If the company has a live website, Claude reads it and pre-fills every
+answer it can find there (name, description, founder, logo, colors, fonts, voice,
+pricing, contact info), marking each one `(from website, confirm)`. It then only asks
+you the questions the site couldn't answer, and has you confirm or correct the
+pre-filled ones.
+
 ---
+
+## 0. Website
+
+0. Company domain (e.g. `example.com`)? Is there a live website on it yet? If the main
+   site lives somewhere else (a different domain, a Linktree, a social profile), give
+   that link too.
 
 ## 1. Company basics
 
@@ -43,4 +59,3 @@ Answer inline below each question (bullets, short prose, whatever's fastest).
 ## 5. Skill setup
 
 14. Confirm company name for `.claude/skills/pitch-deck/scripts/deck-kit.js`'s `COMPANY_NAME`.
-15. Any folders from the unused list (`business-plan/`, `executive-summary/`, `competitive-analysis/`, `website-copy/`, `1-pager/output/`, `emails/drafts/`) you want removed now vs. left as placeholders?
