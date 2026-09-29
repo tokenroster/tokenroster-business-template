@@ -6,10 +6,15 @@
     },
     "tokenroster-manage": {
       "type": "http",
-      "url": "https://tokenroster.com/api/manage/mcp",
-      "headers": {
-        "Authorization": "Bearer ${TOKENROSTER_API_KEY}"
-      }
+      "url": "https://tokenroster.com/api/manage/mcp"
+    },
+    "tokenroster-dev": {
+      "type": "http",
+      "url": "http://localhost:3000/api/mcp"
+    },
+    "tokenroster-dev-manage": {
+      "type": "http",
+      "url": "http://localhost:3000/api/manage/mcp"
     }
   }
 }
