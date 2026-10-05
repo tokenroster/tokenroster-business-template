@@ -1,7 +1,7 @@
 ---
 name: md-to-pdf
 description: >
-  Converts {{COMPANY}} markdown files to professional PDF exports using a
+  Converts the company's markdown files to professional PDF exports using a
   clean print stylesheet. Use whenever the user asks to export, convert, or
   generate a PDF from markdown, regenerate sales PDFs, or mentions md-to-pdf
   or one-pager export. Handles single files and batch export of sales/1-pager one-pagers.
@@ -39,6 +39,7 @@ Before exporting, confirm:
 1. Node.js 18+ installed (`node -v`)
 2. Dependencies installed once, from this skill's `scripts/` folder: `npm install` (installs `playwright` and `marked` per `package.json`, not done automatically when this template is copied)
 3. Chromium available (`npx playwright install chromium` on first run, from the same `scripts/` folder)
+4. `company.json` at the repo root has a non-empty `domain` (written by the `tokenroster-company-setup` skill)
 
 ---
 
@@ -83,7 +84,7 @@ Feature table column headers must be written in the markdown source, the export 
 
 If layout breaks, fix CSS selectors (`table`, `h1 + h3`, `blockquote`, `hr`) before editing markdown.
 
-`one-pager-print.css` has one placeholder to fill in once you have a domain: `{{COMPANY_DOMAIN}}` in the CTA-contact-line selector near the bottom of the file.
+The CTA-contact-line selector near the bottom of `one-pager-print.css` contains a `{{COMPANY_DOMAIN}}` token. Don't replace it by hand: `export-pdf.js` fills it at render time from `domain` in `company.json` at the repo root, and exits with an error if that field is empty.
 
 ---
 

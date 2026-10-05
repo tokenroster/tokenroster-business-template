@@ -8,7 +8,7 @@ fitted to this company's stage and model, and writes it straight into `strategy/
 drafted, review the personas and say what's off, don't try to get everything right in
 this file first.
 
-The other sections (brand, key numbers, house style, skill setup) are separate facts
+The other sections (brand, key numbers, house style) are separate facts
 Claude can't infer from the company basics, answer those too (the website check below
 often covers the brand ones).
 
@@ -53,9 +53,5 @@ pre-filled ones.
 ## 4. House style
 
 11. Any house style rules — em dash policy, Oxford comma, specific terms to always/never use?
-12. Should external-facing files in `sales/` carry a brand prefix (e.g. `{{COMPANY}}_OnePager_Founders.md`)?
+12. Should external-facing files in `sales/` carry a brand prefix (e.g. `Acme_OnePager_Founders.md`)?
 13. Where does the record of a sent email actually live (Gmail thread, CRM/pipeline log)? Should draft `.md` files be kept or deleted once sent?
-
-## 5. Skill setup
-
-14. Confirm company name for `.claude/skills/pitch-deck/scripts/deck-kit.js`'s `COMPANY_NAME`.

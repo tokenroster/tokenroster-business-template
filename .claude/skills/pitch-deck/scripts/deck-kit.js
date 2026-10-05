@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-// Shared engine for {{COMPANY}} pitch decks: brand-compliant slide HTML
+// Shared engine for the company's pitch decks: brand-compliant slide HTML
 // helpers + PDF rendering + QA screenshots. A per-deck script (e.g.
 // sales/pitch-deck/generation/generate-deck.js) requires this, builds an array
 // of slide HTML strings using the helpers below, then calls buildHtml()
@@ -11,18 +11,28 @@
 //   <repo root>/.claude/skills/pitch-deck/scripts/deck-kit.js  (this file)
 //   <repo root>/.claude/skills/md-to-pdf/scripts/node_modules/playwright  (reused, not reinstalled)
 //   <repo root>/marketing/brand/logos/*.svg
+//   <repo root>/company.json  (company name, written by tokenroster-company-setup)
 //
-// Setup: fill in COMPANY_NAME below, and put your three logo SVGs at the
-// LOGOS path with the filenames referenced below (or change the filenames
-// here to match what you actually have).
+// Setup: put your three logo SVGs at the LOGOS path with the filenames
+// referenced below (or change the filenames here to match what you actually
+// have). The company name comes from company.json, don't hardcode it here.
 
 const fs = require('fs');
 const path = require('path');
 
-const COMPANY_NAME = '{{COMPANY}}';
-
 const SKILL_DIR = path.join(__dirname, '..');
 const ROOT = path.join(SKILL_DIR, '..', '..', '..');
+
+function readCompanyName() {
+  const companyPath = path.join(ROOT, 'company.json');
+  const { name } = JSON.parse(fs.readFileSync(companyPath, 'utf8'));
+  if (!name) {
+    throw new Error(`"name" is empty in ${companyPath}. Run the tokenroster-company-setup skill first.`);
+  }
+  return name;
+}
+
+const COMPANY_NAME = readCompanyName();
 const LOGOS = path.join(ROOT, 'marketing', 'brand', 'logos');
 const THEME_CSS = fs.readFileSync(path.join(SKILL_DIR, 'assets', 'deck-theme.css'), 'utf8');
 

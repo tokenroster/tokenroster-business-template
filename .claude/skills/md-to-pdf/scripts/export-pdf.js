@@ -22,6 +22,15 @@ function readAsset(name) {
   return fs.readFileSync(path.join(ASSETS_DIR, name), 'utf8');
 }
 
+function readCompanyDomain() {
+  const companyPath = path.join(REPO_ROOT, 'company.json');
+  const { domain } = JSON.parse(fs.readFileSync(companyPath, 'utf8'));
+  if (!domain) {
+    throw new Error(`"domain" is empty in ${companyPath}. Run the tokenroster-company-setup skill first.`);
+  }
+  return domain;
+}
+
 function resolveOutputPath(inputPath) {
   const absInput = path.resolve(inputPath);
   const basename = path.basename(absInput, path.extname(absInput)) + '.pdf';
@@ -37,7 +46,7 @@ function resolveOutputPath(inputPath) {
 function buildHtml(markdown, title, themeName) {
   const body = marked.parse(markdown);
   const wrapper = readAsset('wrapper.html');
-  let styles = readAsset('one-pager-print.css');
+  let styles = readAsset('one-pager-print.css').replaceAll('{{COMPANY_DOMAIN}}', readCompanyDomain());
 
   if (themeName) {
     const themePath = path.join(THEMES_DIR, `${themeName}.css`);

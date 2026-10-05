@@ -204,8 +204,9 @@ p > strong:first-child {
 }
 
 /* CTA contact line — matches a paragraph containing a link to your own
-   domain, so the closing contact line gets accent styling. Replace
-   {{COMPANY_DOMAIN}} with your actual domain (e.g. example.com). */
+   domain, so the closing contact line gets accent styling. The domain
+   token is a render-time token: export-pdf.js fills it from company.json,
+   don't replace it by hand. */
 .document p:has(a[href*='{{COMPANY_DOMAIN}}']) {
   color: var(--teal);
   font-size: 8.5pt;

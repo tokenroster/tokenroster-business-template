@@ -1,16 +1,18 @@
 ---
 name: one-pager
 description: >
-  Generates a {{COMPANY}} one-pager for a specific audience. Use whenever the user
+  Generates a company one-pager for a specific audience. Use whenever the user
   asks to create, write, or draft a one-pager, sales doc, leave-behind, or audience-specific
   pitch document. Trigger for phrases like "make a one-pager for X", "draft a one-pager",
   "we need a doc for X audience", "write a pitch doc for X", or any variation of
   creating a short-form sales or partnership document for a specific audience.
 ---
 
-# {{COMPANY}} One-Pager Generator
+# One-Pager Generator
 
-This skill produces audience-specific one-pagers in {{COMPANY}}'s established format.
+This skill produces audience-specific one-pagers in the company's established format.
+The company name and domain come from `company.json` at the repo root: wherever the
+templates below say `[Company]` or `[domain]` (`<domain>` inside a link), use its `name` and `domain` values exactly.
 Every one-pager is tight, direct, and written entirely for one reader, not a general audience.
 
 > Setup note: this skeleton assumes two modes (platform vs. custom service), copied from a two-sided-marketplace example. If your business only ever sells one thing to different audiences, delete the mode distinction in Step 1 and keep a single structure. Delete this blockquote once you've decided.
@@ -23,7 +25,7 @@ Before writing anything, determine:
 
 1. **Who is the audience?** (e.g. end customers, investors, channel partners, institutional buyers)
 2. **What is their primary job to be done?** (raise capital, find deal flow, screen applicants, evaluate a purchase, etc.)
-3. **What does {{COMPANY}} give them?** (standard product/service vs. a bespoke engagement)
+3. **What does the company give them?** (standard product/service vs. a bespoke engagement)
 4. **Do they have a named contact or proof point?** (e.g. a named partner org, a city, a client name)
 
 Then determine the mode (delete this table and Step 3's second structure if you only need one mode):
@@ -44,7 +46,7 @@ Collect the following before writing. If not provided, use defaults from the ref
 **Required:**
 - Audience name (e.g. "accelerators", "city EDCs")
 - Their core pain point (1 sentence)
-- The primary value {{COMPANY}} delivers to them
+- The primary value the company delivers to them
 
 **Optional but preferred:**
 - A named proof point (partner org, city, fund, or client name)
@@ -52,6 +54,8 @@ Collect the following before writing. If not provided, use defaults from the ref
 - Any pricing or engagement notes that differ from standard
 
 **Reference data:**
+
+Read `company.json` for the exact company name and domain.
 
 If you keep a shared numbers file (see `CLAUDE.md`'s "Key numbers" section), read it before writing any one-pager, it's the single source of truth for current stats, pricing, and contact information. Do not use hardcoded numbers, pull from that file every time.
 
@@ -67,25 +71,25 @@ Follow this section order exactly:
 
 **1. Header**
 ```
-# {{COMPANY}}
+# [Company]
 ### [Tagline — written for this audience, not generic]
 
-**{{COMPANY_DOMAIN}} · [Month Year]**
+**[domain] · [Month Year]**
 
 ---
 ```
-Tagline formula: what {{COMPANY}} does *for this specific reader*, in plain language. Not a brand statement.
+Tagline formula: what the company does *for this specific reader*, in plain language. Not a brand statement.
 
 **2. The problem**
 Section header: `## The [X] problem`, name the specific problem this audience has.
 - 2–3 sentences maximum
 - Written in second person ("you", "your") where possible
-- End with an italicized one-liner: `*{{COMPANY}} [fixes/is/solves] that.*`
+- End with an italicized one-liner: `*[Company] [fixes/is/solves] that.*`
 
 **3. What you get**
 Section header: `## What [we do / you get]`
 - 1–2 sentences of framing
-- A feature table with 2 columns and **explicit header labels** (e.g. `{{COMPANY}} provides | Why it matters`), never use empty header cells
+- A feature table with 2 columns and **explicit header labels** (e.g. `[Company] provides | Why it matters`), never use empty header cells
 - 4–6 rows maximum, only features relevant to this audience
 
 **4. How it works** *(include if the workflow needs explaining)*
@@ -119,7 +123,7 @@ Section header: `## Get started`
 
 **9. Footer**
 ```
-*{{COMPANY}} · Confidential & Proprietary · [Month Year]*
+*[Company] · Confidential & Proprietary · [Month Year]*
 ```
 
 ---
@@ -132,12 +136,12 @@ Follow this section order exactly:
 
 **2. The problem**
 - Same format as platform mode
-- End with: `*{{COMPANY}} [builds/designs/creates] that.*`
+- End with: `*[Company] [builds/designs/creates] that.*`
 
 **3. What we do differently**
 Section header: `## What we do differently`
 - Open by explicitly contrasting with the standard product:
-  "{{COMPANY}}'s platform uses a standard [X] for most customers. That's not what we build for [this audience]."
+  "[Company]'s platform uses a standard [X] for most customers. That's not what we build for [this audience]."
 - Then describe the custom service clearly
 - Feature table: what the custom engagement includes | why it matters
 
@@ -152,8 +156,8 @@ Section header: `## Who this is for`
 - Bullet list of org types
 - 4–6 bullets max
 
-**6. Why {{COMPANY}}**
-Section header: `## Why {{COMPANY}}`
+**6. Why [Company]**
+Section header: `## Why [Company]`
 - 2–3 sentences on relevant experience
 - Name a specific proof point if available (named client, city, fund)
 - Keep it factual, no superlatives
@@ -167,7 +171,7 @@ Section header: `## Pricing`
 
 **8. Contact**
 ```
-**[contact email]** · [{{COMPANY_DOMAIN}}](https://{{COMPANY_DOMAIN}})
+**[contact email]** · [<domain>](https://<domain>)
 ```
 
 **9. Footer** — same as platform mode

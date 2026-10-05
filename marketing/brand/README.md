@@ -1,6 +1,6 @@
 # Brand
 
-Source of truth for {{COMPANY}}'s visual identity and voice.
+Source of truth for the company's visual identity and voice.
 
 ## Contents
 

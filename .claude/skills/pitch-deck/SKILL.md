@@ -1,21 +1,23 @@
 ---
 name: pitch-deck
 description: >
-  Builds or updates {{COMPANY}}'s brand-compliant pitch deck as a PDF. Use whenever the
+  Builds or updates the company's brand-compliant pitch deck as a PDF. Use whenever the
   user asks to create, update, rebrand, or regenerate a pitch deck, or asks to
   add/remove/reorder a slide. Renders via HTML + Chromium, not PowerPoint —
   no LibreOffice or PowerPoint-safe brand fonts required. A PDF gets pixel-accurate
   brand fonts and reuses the same rendering pipeline as md-to-pdf.
 ---
 
-# {{COMPANY}} Pitch Deck Generator
+# Pitch Deck Generator
 
 Produces a widescreen (13.333in x 7.5in) PDF deck styled to `marketing/brand/brand-guidelines.md`:
 paper/ink surfaces, a single accent color, and a display/body/mono font trio. Content and
 visual engine are separate, this skill owns the engine (`scripts/deck-kit.js`,
 `assets/deck-theme.css`); each deck gets its own small build script that calls into it.
 
-> Setup note: before your first deck, put three logo SVGs at `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg` (or rename the paths `deck-kit.js` reads them from), and fill in `COMPANY_NAME` near the top of `deck-kit.js`. Delete this blockquote once done.
+> Setup note: before your first deck, put three logo SVGs at `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg` (or rename the paths `deck-kit.js` reads them from). Delete this blockquote once done.
+
+The company name in slide footers comes from `name` in `company.json` at the repo root, `deck-kit.js` reads it at runtime. In the paths below, `<Company>` means that same `name` value.
 
 ---
 
@@ -27,6 +29,7 @@ skill's `scripts/` folder:
 1. Node.js 18+ installed (`node -v`)
 2. `npm install` (installs `playwright` per `package.json`)
 3. `npx playwright install chromium` (first run only)
+4. `company.json` at the repo root has a non-empty `name` (written by the `tokenroster-company-setup` skill)
 
 ---
 
@@ -36,7 +39,7 @@ Before writing or editing a single slide:
 
 - `marketing/brand/brand-guidelines.md` — colors, fonts, logo rules, voice/tone
 - Your shared numbers file, if you keep one (see `CLAUDE.md`) — every number that appears on a slide
-- The deck's markdown content source, e.g. `sales/pitch-deck/{{COMPANY}}_PitchDeck.md` — current slide-by-slide text, so an update stays in sync with it (update this file too when the deck changes, see Step 6)
+- The deck's markdown content source, e.g. `sales/pitch-deck/<Company>_PitchDeck.md` — current slide-by-slide text, so an update stays in sync with it (update this file too when the deck changes, see Step 6)
 
 If a stat on an existing slide doesn't match your numbers source anymore, fix it. Don't propagate stale numbers.
 
@@ -50,8 +53,8 @@ If a stat on an existing slide doesn't match your numbers source anymore, fix it
 | `.claude/skills/pitch-deck/assets/deck-theme.css` | The brand CSS. Edit here if the *look* needs to change for every deck; don't fork a copy per deck. |
 | `sales/pitch-deck/generation/generate-deck.js` | A deck's content script, write one per deck, using the shared kit. |
 | `sales/pitch-deck/generation/assets/` | Deck-specific assets (e.g. embedded team photos) that aren't brand assets. |
-| `sales/pitch-deck/{{COMPANY}}_PitchDeck.md` | Readable content source for the current deck (mirrors what's in the PDF). |
-| `sales/pitch-deck/output/{{COMPANY}}_Deck_v[N].pdf` | Output. Version-bump the filename on a new revision; never overwrite an already-shared version. |
+| `sales/pitch-deck/<Company>_PitchDeck.md` | Readable content source for the current deck (mirrors what's in the PDF). |
+| `sales/pitch-deck/output/<Company>_Deck_v[N].pdf` | Output. Version-bump the filename on a new revision; never overwrite an already-shared version. |
 
 A new deck gets its own `<slug>/generation/generate-deck.js` under `sales/`, requiring the shared kit, and writes its PDF to that deck's own `output/` folder. Don't duplicate `deck-kit.js` or `deck-theme.css` per deck.
 
@@ -137,7 +140,7 @@ Fix and re-screenshot only the slides that changed. Do not declare the deck done
 
 ## Step 6 — After rendering
 
-- Update the deck's markdown content source (e.g. `sales/pitch-deck/{{COMPANY}}_PitchDeck.md`) to match whatever actually shipped in the PDF, including slide order and count. The markdown is the readable record of what's in the deck, don't let it drift.
+- Update the deck's markdown content source (e.g. `sales/pitch-deck/<Company>_PitchDeck.md`) to match whatever actually shipped in the PDF, including slide order and count. The markdown is the readable record of what's in the deck, don't let it drift.
 - Report the output path, and call out anything you corrected along the way (a stale stat, a data error inherited from a prior version) rather than silently fixing it.
 - Leave prior dated/versioned PDFs in `sales/pitch-deck/output/` alone unless the user asks you to remove them.
 

@@ -33,6 +33,15 @@ If a new document doesn't fit an existing folder, ask before creating a new one.
 
 ---
 
+## Company facts for tooling
+
+`company.json` at the repo root holds the company's exact name and bare domain. The skills
+in `.claude/skills/` read it at runtime and contain nothing company-specific themselves.
+If the name or domain changes, update `company.json` only. Never hardcode either into a
+skill or script; keeping skills generic is what lets template updates merge cleanly.
+
+---
+
 ## Key numbers (optional, only if this applies to you)
 
 If stats, pricing, or contact info show up in more than one document (a one-pager, a pitch deck, an executive summary), don't let each copy drift independently. Put them in a single file, e.g. `key-numbers.md` at the repo root, and pull from it every time instead of hardcoding. If the user provides updated numbers, update that file first, then propagate to affected documents.
@@ -59,7 +68,7 @@ Follow the full process in `.claude/skills/one-pager/SKILL.md`. It ships with tw
 
 ## Pitch deck
 
-Rendered as a PDF (HTML + Chromium), not PowerPoint, this environment has no LibreOffice and brand fonts aren't guaranteed to be in PowerPoint's safe font list. Follow the full process in `.claude/skills/pitch-deck/SKILL.md`. Needs one-time setup (logo files, company name) before first use, see that file.
+Rendered as a PDF (HTML + Chromium), not PowerPoint, this environment has no LibreOffice and brand fonts aren't guaranteed to be in PowerPoint's safe font list. Follow the full process in `.claude/skills/pitch-deck/SKILL.md`. Needs one-time setup (logo files, `company.json`) before first use, see that file.
 
 ---
 

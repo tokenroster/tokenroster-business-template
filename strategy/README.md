@@ -1,6 +1,6 @@
 # Strategy
 
-Internal direction-setting documents. These define what {{COMPANY}} is, why it exists, and how it plans to grow. Not for external distribution.
+Internal direction-setting documents. These define what the company is, why it exists, and how it plans to grow. Not for external distribution.
 
 | Convention | Detail |
 |---|---|

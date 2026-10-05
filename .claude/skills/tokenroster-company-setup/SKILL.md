@@ -4,8 +4,9 @@ description: >
   Runs first-time setup of this workspace template for a real company. Walks the user
   through setup-questionnaire.md (or reads it if already filled in) for company basics
   and brand facts, derives each folder's persona from that alone and generates the three
-  AGENT.md files, and propagates everything into CLAUDE.md, README.md, and
-  marketing/brand/brand-guidelines.md, replacing every {{PLACEHOLDER}} in the repo. Use
+  AGENT.md files, writes company.json (name + domain, read by the skills at runtime), and
+  fills in CLAUDE.md, README.md, and marketing/brand/brand-guidelines.md. Never edits
+  the skills themselves. Use
   when the user asks to set up, initialize, onboard, or configure this template for a new
   company, asks to fill in or process the setup questionnaire, or asks how to get started
   with this repo.
@@ -40,7 +41,7 @@ entirely in Step 4.
     `(from website, confirm)`. Questions the site can usually answer: Q1 name, Q2
     description, Q3 business model (stage only if stated), Q4 founder (about/team page),
     Q5 whether a logo exists and where, Q6 colors, Q7 fonts, Q9 voice (inferred from
-    the copy), Q10 pricing and contact info, Q14 (same as Q1). Q8, Q11, Q12, and Q13
+    the copy), Q10 pricing and contact info. Q8, Q11, Q12, and Q13
     can't come from a website, always ask those.
   - Only pre-fill what's on the page. Leave a question blank rather than guess, and say
     in the tag when something is inferred rather than stated (e.g.
@@ -62,26 +63,42 @@ entirely in Step 4.
   background in Step 4 instead of inventing one for that folder. If left blank, Claude
   invents a fitting expert for every persona.
 - Confirm with the user once the file reads as complete before propagating anything,
-  changes from here touch most of the repo.
+  including the exact company name (Q1) and bare domain (Q0) that will go into
+  `company.json`.
 
 ---
 
-## Step 2 — Extract the placeholder values
+## Step 2 — Write `company.json` and resolve the placeholders
 
-From the answered questionnaire, resolve:
+Write `company.json` at the repo root from the answered questionnaire:
+
+```json
+{
+  "name": "<Q1, exact name/casing>",
+  "domain": "<Q0, bare domain like example.com: no https://, no trailing slash>"
+}
+```
+
+This is the only place the name and domain live for tooling. The skills (`one-pager`,
+`md-to-pdf`, `pitch-deck`) read it at runtime, so **never edit anything under
+`.claude/skills/` during setup**. Keeping skills identical to the template is what lets
+template updates merge cleanly later. Only add fields to `company.json` when a script or
+skill actually reads them.
+
+Then resolve the placeholders that live in the content files:
 
 | Placeholder | Comes from |
 |---|---|
 | `{{COMPANY}}` | Q1 (exact name/casing) |
-| `{{COMPANY_DOMAIN}}` | Q0 (used in one-pager/pitch-deck headers) |
 | `{{STRATEGY_PERSONA_NAME}}` | Name generated in Step 4 (or Q4's named founder, if it applies to this folder) |
 | `{{MARKETING_PERSONA_NAME}}` | Name generated in Step 4 (or Q4's named founder, if it applies to this folder) |
 | `{{SALES_PERSONA_NAME}}` | Name generated in Step 4 (or Q4's named founder, if it applies to this folder) |
 
-Find every occurrence with a repo-wide search (`grep -rl '{{COMPANY}}\|{{STRATEGY_PERSONA_NAME}}\|{{MARKETING_PERSONA_NAME}}\|{{SALES_PERSONA_NAME}}\|{{COMPANY_DOMAIN}}'`)
-rather than guessing file locations, template files change. Do not touch `{{BODY}}`,
-`{{STYLES}}`, or `{{TITLE}}` in `.claude/skills/md-to-pdf/` — those are that skill's own
-render-time template tokens, unrelated to company setup.
+Find every occurrence with a repo-wide search that excludes the skills folder
+(`grep -rl --exclude-dir=.claude '{{COMPANY}}\|{{STRATEGY_PERSONA_NAME}}\|{{MARKETING_PERSONA_NAME}}\|{{SALES_PERSONA_NAME}}' .`)
+rather than guessing file locations, template files change. Tokens inside
+`.claude/skills/` (`{{COMPANY_DOMAIN}}`, `{{BODY}}`, `{{STYLES}}`, `{{TITLE}}`) are
+render-time tokens the scripts fill themselves, leave them alone.
 
 ---
 
@@ -155,35 +172,31 @@ Do not create any sales or marketing collateral before this file exists, per `CL
 
 ---
 
-## Step 7 — Wire up the pitch-deck skill
-
-Set `COMPANY_NAME` near the top of `.claude/skills/pitch-deck/scripts/deck-kit.js` to the
-Q1 answer (Q14 confirms it). Leave the rest of that skill's setup (installing
-dependencies, adding logo SVGs) to the user, it's covered by that skill's own SKILL.md.
-
----
-
-## Step 8 — Finish up, keep the skeleton intact
+## Step 7 — Finish up, keep the skeleton intact
 
 - Never delete any file or folder of the skeleton project during setup. That includes
   the empty placeholder folders (`strategy/business-plan/`, `strategy/executive-summary/`,
   `strategy/competitive-analysis/`, `marketing/website-copy/`, `sales/1-pager/output/`,
   `sales/emails/drafts/`, `sales/pitch-deck/generation/assets/`,
   `sales/pitch-deck/output/`) and their `.gitkeep` files, the READMEs, `AGENT.md` files,
-  skills, and `setup-questionnaire.md` itself. Setup only edits text inside files and
-  adds new ones (`brand-guidelines.md`, `key-numbers.md`). Don't offer to remove anything.
+  skills, and `setup-questionnaire.md` itself. Setup only edits text inside content files
+  (never skills) and fills in or adds new ones (`company.json`, `brand-guidelines.md`,
+  `key-numbers.md`). Don't offer to remove anything. The skills' own remaining setup
+  (installing dependencies, adding logo SVGs) is left to the user, each skill's SKILL.md
+  covers it.
 - Update each affected folder's `README.md` if a naming convention changed (e.g. the
   sales brand-prefix decision from Q12), per `CLAUDE.md`'s README rule. Don't create new
   READMEs, only update the ones that already exist.
-- Once every `{{PLACEHOLDER}}` is resolved repo-wide, delete the setup blockquote at the
+- Once every `{{PLACEHOLDER}}` outside `.claude/skills/` is resolved, delete the setup blockquote at the
   top of `README.md` and the "template/README.md" pointer line at the top of `CLAUDE.md`.
 
 ---
 
-## Step 9 — Report back
+## Step 8 — Report back
 
-List what was filled in, the persona each folder ended up with (name + one line each),
+List what was filled in (including the `company.json` values), the persona each folder ended up with (name + one line each),
 what was deliberately skipped (e.g. no shared numbers file yet, folders left as
 placeholders), and anything still blocked on the user (missing logo files, an undecided
-house style rule). Re-run a repo-wide `{{` search before declaring done, a single missed
-placeholder is the most common failure mode here.
+house style rule). Re-run a `{{` search excluding `.claude/` before declaring done, a
+single missed placeholder is the most common failure mode here. Also run
+`git status -- .claude/skills` and confirm it shows no changes.

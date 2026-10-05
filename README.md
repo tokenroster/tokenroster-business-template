@@ -9,6 +9,7 @@ A copy-and-fill starting point for running a startup's business documents (strat
 ```
 template/
 ├── CLAUDE.md              Rules and conventions (fill in the placeholders first)
+├── company.json           Company name + domain, read by the skills at runtime
 ├── strategy/               Internal direction-setting documents
 │   ├── AGENT.md                   Persona template
 │   ├── README.md
@@ -32,22 +33,22 @@ template/
     ├── README.md
     ├── one-pager/              Drafts audience-specific one-pager markdown
     ├── md-to-pdf/              Renders markdown → PDF (needs `npm install`, see its SKILL.md)
-    └── pitch-deck/             Renders a slide deck to PDF via the same engine (needs logo files + company name filled in, see its SKILL.md)
+    └── pitch-deck/             Renders a slide deck to PDF via the same engine (needs logo files + company.json filled in, see its SKILL.md)
 ```
 
 Deliberately not included: a rendered `brand-guidelines.md`, a shared numbers file (`CLAUDE.md` explains the pattern as optional), and anything folder- or business-specific like an assessment-framework or valuation skill, or a folder for that output. Those are specific to the original business this was extracted from, or specific to whether your business even needs them; add the equivalent for your own business as it comes up.
 
-The three included skills (`one-pager`, `md-to-pdf`, `pitch-deck`) are generic document-generation machinery, not tied to any one business model. They still need setup, see step 7 below, and each skill's own `SKILL.md` setup note.
+The three included skills (`one-pager`, `md-to-pdf`, `pitch-deck`) are generic document-generation machinery, not tied to any one business model. They contain nothing company-specific: they read the company name and domain from `company.json` at runtime, so you never edit them during setup, and later improvements to the template's skills can be copied or merged in cleanly. They still need dependency setup, see step 7 below, and each skill's own `SKILL.md` setup note.
 
 ## Setup checklist
 
 1. **Copy this folder** to a new project root and rename as needed (this `template/` folder itself is not part of the new project, only its contents are).
-2. **Find and fill every `{{PLACEHOLDER}}`** across the copied files, at minimum `{{COMPANY}}`, `{{STRATEGY_PERSONA_NAME}}`, `{{MARKETING_PERSONA_NAME}}`, `{{SALES_PERSONA_NAME}}` in `CLAUDE.md`, and the same persona names in each `AGENT.md`.
+2. **Fill in `company.json`** (exact company name, bare domain like `example.com`), then **find and fill every `{{PLACEHOLDER}}`** outside `.claude/skills/`, at minimum `{{COMPANY}}`, `{{STRATEGY_PERSONA_NAME}}`, `{{MARKETING_PERSONA_NAME}}`, `{{SALES_PERSONA_NAME}}` in `CLAUDE.md`, and the same persona names in each `AGENT.md`. Tokens inside `.claude/skills/` are filled at render time by the scripts, leave them alone.
 3. **Generate the three personas.** Each `AGENT.md` has a bracketed skeleton, not real content, but you don't need to write the bios yourself: the `tokenroster-company-setup` skill drafts each persona from the company facts and context in `setup-questionnaire.md`, fitted to this company's stage, model, and buyers (bio, what they know cold, how they approach this folder, voice, non-negotiables). Review what it drafts and ask for tweaks rather than starting from scratch.
 4. **Decide if you need a shared numbers file.** If stats, pricing, or contact info will appear in more than one document, create one (e.g. `key-numbers.md` at the repo root) per the pattern in `CLAUDE.md`'s "Key numbers" section. Skip this if it doesn't apply yet.
 5. **Write `marketing/brand/brand-guidelines.md`** before producing any real sales or marketing collateral, it doesn't exist yet in this template. `marketing/brand/README.md` describes what it should contain.
 6. **Decide on house style rules** (e.g. em dash policy, file naming prefix for external docs) and either keep or delete the bracketed suggestions in `CLAUDE.md` and each `AGENT.md`.
-7. **Set up the included skills before first use.** `md-to-pdf`: run `npm install` inside `.claude/skills/md-to-pdf/scripts/`, then `npx playwright install chromium` from the same folder. `pitch-deck`: same two commands inside `.claude/skills/pitch-deck/scripts/` (it has its own separate `package.json`, not shared with md-to-pdf), plus add `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg`, and fill in `COMPANY_NAME` near the top of `.claude/skills/pitch-deck/scripts/deck-kit.js`. `one-pager` needs no setup beyond its `{{PLACEHOLDER}}`s.
+7. **Set up the included skills before first use.** `md-to-pdf`: run `npm install` inside `.claude/skills/md-to-pdf/scripts/`, then `npx playwright install chromium` from the same folder. `pitch-deck`: same two commands inside `.claude/skills/pitch-deck/scripts/` (it has its own separate `package.json`, not shared with md-to-pdf), plus add `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg`. `one-pager` needs no setup beyond `company.json`.
 8. **Delete every blockquote setup-note** (like this section and the ones at the top of `CLAUDE.md` and each `AGENT.md`/`SKILL.md`) once its instructions are done.
 9. **Remove unused empty folders** (`business-plan/`, `executive-summary/`, `competitive-analysis/`, `website-copy/`, `1-pager/output/`, `emails/drafts/`, `pitch-deck/generation/assets/`, `pitch-deck/output/`) if they don't apply yet, or leave them, each has a `.gitkeep` so git tracks the empty directory until real files land.
 
