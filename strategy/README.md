@@ -12,8 +12,13 @@ Internal direction-setting documents. These define what the company is, why it e
 
 | Folder | Purpose |
 |---|---|
-| `competitive-analysis/` | Competitor profiles sourced from research, advisor intel, and market signals |
-| `business-plan/` | Dated business plan snapshots. One per revision, named `[YYYY-MM]-business-plan.md` |
+| `business-plan/` | Dated business plan snapshots, plus customer and market detail. One plan per revision, named `[YYYY-MM]-business-plan.md` |
 | `executive-summary/` | Periodic executive summary snapshots. One per period, named `[YYYY-MM]-executive-summary.md` |
+| `projections/` | Financial model (spreadsheet) and a Markdown summary of it |
+| `pricing/` | Pricing model and dated pricing proposals |
+| `competitive-analysis/` | One file or folder per competitor, sourced from research, advisor intel, and market signals |
+| `bios/` | Team bios, CVs, and headshots |
+
+The annual marketing plan lives at the folder root as `marketing-plan-[YYYY].md`.
 
 Add subfolders as needed (e.g. `deals/` for partnership or M&A analyses) and document them here when you do.

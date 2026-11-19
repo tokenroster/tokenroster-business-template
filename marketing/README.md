@@ -1,15 +1,18 @@
 # Marketing
 
-Brand assets and creative direction: guidelines, visual identity, and content ideas.
+One-to-many work: brand, messaging, and content for every channel.
 
 ## Subfolders
 
 | Folder | Contents |
 |---|---|
 | `brand/` | Source of truth for brand: `brand-guidelines.md` (name, logo, color, type, voice) and `logos/` (SVG assets) |
-| `website-copy/` | Landing page and other site copy |
+| `messaging/` | Shared messaging: ideal customer profiles, company descriptions, founder intro. One-pagers and outreach read from here |
+| `channels/<channel>/` | Content per channel, one folder each (e.g. `website/`, `social/`, `video/`, `podcast/`, `ads/`, `print/`, `press/`, `events/`), plus UTM conventions |
+| `lead-magnets/` | Free offers used to capture signups |
+| `applications/<program>/` | Awards, grants, competitions, and program applications, one folder per program |
 
-Add subfolders as your content mix grows (e.g. `linkedin/`, `videos/`, `ad-copy/`) and document them here when you do.
+Add a channel or program folder when the first piece of content for it lands, and document any new top-level subfolder here.
 
 | Convention | Detail |
 |---|---|

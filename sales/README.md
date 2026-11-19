@@ -1,15 +1,20 @@
 # Sales
 
-External-facing collateral: documents handed to prospects, investors, partners, and other outside readers.
+One-to-one work: collateral handed to prospects, investors, partners, and other outside readers, plus per-account records and email.
 
 | Convention | Detail |
 |---|---|
 | Naming | kebab-case (add a brand prefix here if you adopt one, see `CLAUDE.md`) |
 | Audience | External, specific to each document's target reader |
-| Updates | When stats, pricing, or product features change; if you keep a shared numbers file (see `CLAUDE.md`), update it first |
+| Updates | When stats, pricing, or product features change; update `platform-stats.md` first |
 
-`1-pager/` contains one-pager markdown sources, plus `1-pager/output/` for their exported PDFs. PDFs are generated from the markdown source files, edit the markdown, then regenerate.
+## Subfolders
 
-`emails/` and `emails/drafts/` hold sales outreach. See `sales/AGENT.md` for the convention on whether draft files are kept or deleted once sent.
-
-`pitch-deck/` holds deck content: `generation/` for the build script and deck-specific assets, `output/` for rendered PDFs. Add the markdown content source (`<Company>_PitchDeck.md`, `<Company>` being `name` from `company.json`) and `generation/generate-deck.js` when you write your first deck, see `.claude/skills/pitch-deck/SKILL.md` for the expected layout.
+| Folder | Contents |
+|---|---|
+| `collateral/1-pager/` | One Markdown source per audience, with exported PDFs in `output/`. Edit the Markdown, then regenerate the PDF |
+| `collateral/pitch-deck/` | Deck content: the Markdown content source (`<Company>_PitchDeck.md`, `<Company>` being `name` from `company.json`), `generation/` for the build script and deck-specific assets, `output/` for versioned PDFs. See `.claude/skills/general-pitchDeck/SKILL.md` for the expected layout |
+| `collateral/templates/` | Reusable agreements and standard emails |
+| `accounts/<account>/` | One folder per account: `agreements/`, pricing, `meetings/` |
+| `emails/drafts/` | Outgoing drafts. See `sales/AGENT.md` for whether drafts are kept or deleted once sent |
+| `emails/inbox/` | Logged incoming emails |
