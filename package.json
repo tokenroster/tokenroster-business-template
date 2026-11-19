@@ -1,0 +1,13 @@
+{
+  "name": "business-workspace",
+  "private": true,
+  "description": "Task shortcuts only. No dependencies at the root: each skill installs its own in its scripts/ folder.",
+  "scripts": {
+    "setup:pdf": "cd .claude/skills/general-mdToPdf/scripts && npm install && npx playwright install chromium",
+    "setup:deck": "cd .claude/skills/general-pitchDeck/scripts && npm install && npx playwright install chromium",
+    "setup": "npm run setup:pdf && npm run setup:deck",
+    "pdf": "node .claude/skills/general-mdToPdf/scripts/export-pdf.js",
+    "pdf:all": "node .claude/skills/general-mdToPdf/scripts/export-pdf.js --all-one-pagers",
+    "deck": "node sales/collateral/pitch-deck/generation/generate-deck.js"
+  }
+}

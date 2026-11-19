@@ -6,8 +6,13 @@ node_modules/
 Thumbs.db
 
 # Secrets
+.env
+.mcp.local.json
 .env.*
 !.env.example
 *.pem
 *.key
 .claude/settings.local.json
+
+# Throwaway working files
+scratchpad/

@@ -2,63 +2,71 @@
 
 *A template from TokenRoster.*
 
-A copy-and-fill starting point for running a startup's business documents (strategy, marketing, sales) the way this repo does: a `CLAUDE.md` of rules, a single stats source of truth, per-folder `AGENT.md` personas, and `README.md` files that describe conventions rather than list files. This template was extracted from a working repo, stripped of anything company-specific.
+A copy-and-fill starting point for running a startup's business documents (strategy, marketing, sales) with Claude Code: a `CLAUDE.md` of rules, single sources of truth for stats and brand, per-folder `AGENT.md` personas, and `README.md` files that describe conventions rather than list files. This template was extracted from a working repo, stripped of anything company-specific. `system-architecture.md` explains how the pieces fit together.
 
 ## What's in here
 
 ```
-template/
-├── CLAUDE.md              Rules and conventions (fill in the placeholders first)
-├── company.json           Company name + domain, read by the skills at runtime
-├── strategy/               Internal direction-setting documents
-│   ├── AGENT.md                   Persona template
-│   ├── README.md
-│   ├── business-plan/
-│   ├── executive-summary/
-│   └── competitive-analysis/
-├── marketing/              Brand assets and creative
-│   ├── AGENT.md                   Persona template
-│   ├── README.md
-│   ├── brand/
-│   │   ├── README.md
-│   │   └── logos/
-│   └── website-copy/
-├── sales/                  External-facing collateral
-│   ├── AGENT.md                   Persona template
-│   ├── README.md
-│   ├── 1-pager/output/
-│   ├── emails/drafts/
-│   └── pitch-deck/generation/assets/, pitch-deck/output/
-└── .claude/skills/          Reusable Claude skill files
-    ├── README.md
-    ├── one-pager/              Drafts audience-specific one-pager markdown
-    ├── md-to-pdf/              Renders markdown → PDF (needs `npm install`, see its SKILL.md)
-    └── pitch-deck/             Renders a slide deck to PDF via the same engine (needs logo files + company.json filled in, see its SKILL.md)
+<repo>/
+├── CLAUDE.md                  Rules and conventions (fill in the placeholders first)
+├── system-architecture.md     How the system works, and the full folder map
+├── company.json               Company name + domain, read by the skills at runtime
+├── platform-stats.md          Stats, pricing, partnerships, contact details (skeleton)
+├── avoiding-ai-tells.md       Writing guide for external and persona-voiced copy
+├── setup-questionnaire.md     The answers general-companySetup turns into a configured repo
+├── package.json               Task shortcuts only (setup, pdf, pdf:all, deck), no dependencies
+├── .mcp.json                  TokenRoster MCP servers (public + manage, production, OAuth sign-in)
+├── strategy/                  Internal direction-setting
+│   ├── AGENT.md, README.md
+│   ├── business-plan/, executive-summary/, projections/
+│   └── pricing/, competitive-analysis/, bios/
+├── marketing/                 One-to-many work
+│   ├── AGENT.md, README.md
+│   ├── brand/                 README.md, logos/ (guidelines and tokens land here)
+│   ├── messaging/, channels/website/
+│   └── lead-magnets/, applications/
+├── sales/                     One-to-one work
+│   ├── AGENT.md, README.md
+│   ├── collateral/            1-pager/output/, pitch-deck/{generation/assets,output}/, templates/
+│   ├── accounts/
+│   └── emails/                drafts/, inbox/
+├── docs/                      Working notes: README.md, action-items.md, specs
+├── scratchpad/                Throwaway working files (git-ignored)
+└── .claude/
+    ├── settings.json          Shared project hooks (path guards)
+    ├── settings.local.json.example  Copy to settings.local.json (git-ignored) for personal permissions + MCP enablement
+    ├── hooks/                 guard-read-paths.js, guard-bash-paths.js: keep tool calls inside the repo
+    └── skills/                See .claude/skills/README.md
+        ├── general-companySetup/      First-time setup from the questionnaire
+        ├── general-onePager/          Drafts audience-specific one-pager Markdown
+        ├── general-mdToPdf/           Renders Markdown to PDF (needs `npm run setup:pdf`)
+        ├── general-pitchDeck/         Renders a slide deck to PDF (needs `npm run setup:deck` + logo files)
+        ├── general-summarizeChanges/  Summarizes uncommitted git changes
+        └── general-tokenRosterSync/   Uploads a document to the company's TokenRoster listing
 ```
 
-Deliberately not included: a rendered `brand-guidelines.md`, a shared numbers file (`CLAUDE.md` explains the pattern as optional), and anything folder- or business-specific like an assessment-framework or valuation skill, or a folder for that output. Those are specific to the original business this was extracted from, or specific to whether your business even needs them; add the equivalent for your own business as it comes up.
+Deliberately not included: a written `brand-guidelines.md` or `brand-tokens.css` (setup writes them from your answers), and anything business-specific like an assessment-framework or valuation skill. Add the equivalent for your own business as it comes up.
 
-The three included skills (`one-pager`, `md-to-pdf`, `pitch-deck`) are generic document-generation machinery, not tied to any one business model. They contain nothing company-specific: they read the company name and domain from `company.json` at runtime, so you never edit them during setup, and later improvements to the template's skills can be copied or merged in cleanly. They still need dependency setup, see step 7 below, and each skill's own `SKILL.md` setup note.
+All six skills are generic: they contain nothing company-specific and read the company name and domain from `company.json`, the numbers from `platform-stats.md`, and the look from `marketing/brand/brand-tokens.css` at runtime. You never edit them during setup, so later improvements to the template's skills can be copied or merged in cleanly. Until the brand tokens exist, the PDF and deck skills render in a shared default look and warn that the output isn't on-brand yet.
 
 ## Setup checklist
 
-1. **Copy this folder** to a new project root and rename as needed (this `template/` folder itself is not part of the new project, only its contents are).
-2. **Fill in `company.json`** (exact company name, bare domain like `example.com`), then **find and fill every `{{PLACEHOLDER}}`** outside `.claude/skills/`, at minimum `{{COMPANY}}`, `{{STRATEGY_PERSONA_NAME}}`, `{{MARKETING_PERSONA_NAME}}`, `{{SALES_PERSONA_NAME}}` in `CLAUDE.md`, and the same persona names in each `AGENT.md`. Tokens inside `.claude/skills/` are filled at render time by the scripts, leave them alone.
-3. **Generate the three personas.** Each `AGENT.md` has a bracketed skeleton, not real content, but you don't need to write the bios yourself: the `tokenroster-company-setup` skill drafts each persona from the company facts and context in `setup-questionnaire.md`, fitted to this company's stage, model, and buyers (bio, what they know cold, how they approach this folder, voice, non-negotiables). Review what it drafts and ask for tweaks rather than starting from scratch.
-4. **Decide if you need a shared numbers file.** If stats, pricing, or contact info will appear in more than one document, create one (e.g. `key-numbers.md` at the repo root) per the pattern in `CLAUDE.md`'s "Key numbers" section. Skip this if it doesn't apply yet.
-5. **Write `marketing/brand/brand-guidelines.md`** before producing any real sales or marketing collateral, it doesn't exist yet in this template. `marketing/brand/README.md` describes what it should contain.
-6. **Decide on house style rules** (e.g. em dash policy, file naming prefix for external docs) and either keep or delete the bracketed suggestions in `CLAUDE.md` and each `AGENT.md`.
-7. **Set up the included skills before first use.** `md-to-pdf`: run `npm install` inside `.claude/skills/md-to-pdf/scripts/`, then `npx playwright install chromium` from the same folder. `pitch-deck`: same two commands inside `.claude/skills/pitch-deck/scripts/` (it has its own separate `package.json`, not shared with md-to-pdf), plus add `marketing/brand/logos/wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg`. `one-pager` needs no setup beyond `company.json`.
-8. **Delete every blockquote setup-note** (like this section and the ones at the top of `CLAUDE.md` and each `AGENT.md`/`SKILL.md`) once its instructions are done.
-9. **Remove unused empty folders** (`business-plan/`, `executive-summary/`, `competitive-analysis/`, `website-copy/`, `1-pager/output/`, `emails/drafts/`, `pitch-deck/generation/assets/`, `pitch-deck/output/`) if they don't apply yet, or leave them, each has a `.gitkeep` so git tracks the empty directory until real files land.
+1. **Create your copy** of this repo (use it as a template, or clone it and point `origin` at your own remote).
+2. **Run setup.** Ask Claude to set up the workspace: the `general-companySetup` skill walks through `setup-questionnaire.md` (or reads it if you've already answered it), then writes `company.json`, fills `platform-stats.md`, fills every `{{PLACEHOLDER}}` outside `.claude/skills/`, drafts the three `AGENT.md` personas, and writes `marketing/brand/brand-guidelines.md` and `brand-tokens.css`. Review the personas and ask for tweaks rather than starting from scratch.
+3. **Check `platform-stats.md`.** Anything left `TBD` is a number no document can cite yet.
+4. **Add logo files** to `marketing/brand/logos/`: `wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg` (the deck skill reads these names).
+5. **Install the rendering dependencies:** `npm run setup` from the repo root (installs each skill's own `node_modules` and Chromium; nothing is installed at the root).
+6. **Sign in to TokenRoster** if you'll use `general-tokenRosterSync`: create your company listing on tokenroster.com, copy `.claude/settings.local.json.example` to `.claude/settings.local.json`, then run `/mcp`, pick `tokenroster-manage`, and authenticate.
+7. **Delete every blockquote setup note** (here, at the top of `CLAUDE.md`, `platform-stats.md`, and each `AGENT.md`/`SKILL.md`) once its instructions are done.
+8. **Leave the empty placeholder folders in place.** Each holds a `.gitkeep` so git tracks it until real files land, and the folder map in `system-architecture.md` expects them.
 
 ## The pattern this template encodes
 
-- **If numbers repeat across documents, one file is the source of truth for them**, not scattered copies. Every document reads from it; nothing hardcodes a stat. (Optional, see `CLAUDE.md`.)
-- **One file is the source of truth for brand** (`marketing/brand/brand-guidelines.md`). Every visual or copy decision defers to it.
+- **One file per fact.** Numbers live in `platform-stats.md`, brand in `marketing/brand/`, company identity in `company.json`. Every document reads from them; nothing hardcodes a stat or a color.
+- **Judgment by the model, formatting by code.** Choosing what to say is Claude's job; turning it into a brand-accurate PDF is a script's.
 - **Personas, not just rules.** An `AGENT.md` per folder gives Claude a consistent expert judgment to apply, not just a style guide, so output quality doesn't depend on how the request was phrased.
 - **READMEs describe conventions, not inventories.** They explain what belongs in a folder and why, not a list of what's currently in it (that list goes stale immediately; conventions don't).
-- **Feedback compounds.** When you correct a draft (an email greeting, a tone choice, a naming rule), the fix belongs in the relevant `AGENT.md` or skill file, not just in that one conversation, so the same correction doesn't have to be given twice.
+- **Feedback compounds.** When you correct a draft (an email greeting, a tone choice, a naming rule), the fix belongs in the relevant `AGENT.md`, skill, or `avoiding-ai-tells.md`, not just in that one conversation, so the same correction doesn't have to be given twice.
 
 ## License
 
