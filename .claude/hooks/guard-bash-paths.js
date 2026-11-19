@@ -2,7 +2,7 @@
 // PreToolUse guard for Bash|PowerShell.
 // Best-effort: scans the command text for path-looking tokens and blocks
 // any that resolve outside this project's root. This is a text scan, not a
-// sandbox — it stops naive/accidental escapes (a literal path pasted into a
+// sandbox: it stops naive/accidental escapes (a literal path pasted into a
 // command) but can be evaded by indirection (env vars, base64, inline
 // scripts that compute a path at runtime). True enforcement requires
 // sandbox.filesystem settings, which only user-level or managed settings

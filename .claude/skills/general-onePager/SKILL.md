@@ -1,5 +1,5 @@
 ---
-name: one-pager
+name: general-onePager
 description: >
   Generates a company one-pager for a specific audience. Use whenever the user
   asks to create, write, or draft a one-pager, sales doc, leave-behind, or audience-specific
@@ -19,7 +19,7 @@ Every one-pager is tight, direct, and written entirely for one reader, not a gen
 
 ---
 
-## Step 1 — Identify the audience and mode
+## Step 1: Identify the audience and mode
 
 Before writing anything, determine:
 
@@ -39,7 +39,7 @@ If unsure, ask: *does this audience get the same thing every other user gets, or
 
 ---
 
-## Step 2 — Gather inputs
+## Step 2: Gather inputs
 
 Collect the following before writing. If not provided, use defaults from the reference data below.
 
@@ -57,13 +57,15 @@ Collect the following before writing. If not provided, use defaults from the ref
 
 Read `company.json` for the exact company name and domain.
 
-If you keep a shared numbers file (see `CLAUDE.md`'s "Key numbers" section), read it before writing any one-pager, it's the single source of truth for current stats, pricing, and contact information. Do not use hardcoded numbers, pull from that file every time.
+Read `platform-stats.md` at the repo root before writing any one-pager. It's the single source of truth for current stats, pricing, and contact information. Do not use hardcoded numbers, pull from that file every time, and if a number you need is `TBD` there, ask the user rather than inventing one.
+
+Read `avoiding-ai-tells.md` before writing, and run its checklist before saving.
 
 Always read `marketing/brand/brand-guidelines.md` before writing or exporting any one-pager. It governs voice/tone as well as color, typography, and logo usage for the exported PDF.
 
 ---
 
-## Step 3 — Write the one-pager
+## Step 3: Write the one-pager
 
 ### Platform mode structure
 
@@ -72,7 +74,7 @@ Follow this section order exactly:
 **1. Header**
 ```
 # [Company]
-### [Tagline — written for this audience, not generic]
+### [Tagline: written for this audience, not generic]
 
 **[domain] · [Month Year]**
 
@@ -132,7 +134,7 @@ Section header: `## Get started`
 
 Follow this section order exactly:
 
-**1. Header** — same format as platform mode
+**1. Header**: same format as platform mode
 
 **2. The problem**
 - Same format as platform mode
@@ -174,11 +176,11 @@ Section header: `## Pricing`
 **[contact email]** · [<domain>](https://<domain>)
 ```
 
-**9. Footer** — same as platform mode
+**9. Footer**: same as platform mode
 
 ---
 
-## Step 4 — Tone and style rules
+## Step 4: Tone and style rules
 
 Apply these to every one-pager regardless of mode:
 
@@ -193,7 +195,7 @@ Apply these to every one-pager regardless of mode:
 
 ---
 
-## Step 5 — Quality checks before saving
+## Step 5: Quality checks before saving
 
 - [ ] Tagline is written for this specific audience, not a general brand statement
 - [ ] Problem section ends with the italicized one-liner
@@ -210,7 +212,7 @@ Apply these to every one-pager regardless of mode:
 
 ## Output
 
-Save the file to `sales/1-pager/` using this naming convention:
+Save the file to `sales/collateral/1-pager/` using this naming convention:
 
 `onepager-[audience-name].md` (kebab-case, or your adopted external-doc convention, see `CLAUDE.md`)
 

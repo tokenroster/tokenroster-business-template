@@ -9,8 +9,9 @@ const path = require('path');
 const SKILL_DIR = path.join(__dirname, '..');
 const REPO_ROOT = path.join(SKILL_DIR, '..', '..', '..');
 const ASSETS_DIR = path.join(SKILL_DIR, 'assets');
-const THEMES_DIR = path.join(ASSETS_DIR, 'themes');
-const ONE_PAGER_DIR = path.join(REPO_ROOT, 'sales', '1-pager');
+const BRAND_TOKENS = path.join(REPO_ROOT, 'marketing', 'brand', 'brand-tokens.css');
+const DEFAULT_TOKENS = path.join(ASSETS_DIR, 'default-brand-tokens.css');
+const ONE_PAGER_DIR = path.join(REPO_ROOT, 'sales', 'collateral', '1-pager');
 const ONE_PAGER_PDF_DIR = path.join(ONE_PAGER_DIR, 'output');
 
 marked.setOptions({
@@ -26,9 +27,26 @@ function readCompanyDomain() {
   const companyPath = path.join(REPO_ROOT, 'company.json');
   const { domain } = JSON.parse(fs.readFileSync(companyPath, 'utf8'));
   if (!domain) {
-    throw new Error(`"domain" is empty in ${companyPath}. Run the tokenroster-company-setup skill first.`);
+    throw new Error(`"domain" is empty in ${companyPath}. Run the general-companySetup skill first.`);
   }
   return domain;
+}
+
+// The company's brand tokens if they exist, otherwise this skill's default look.
+// They go first in the <style> block so an @import for web fonts stays valid.
+let warnedDefaultTokens = false;
+function readBrandTokens() {
+  if (fs.existsSync(BRAND_TOKENS)) {
+    return fs.readFileSync(BRAND_TOKENS, 'utf8');
+  }
+  if (!warnedDefaultTokens) {
+    console.warn(
+      `Warning: ${path.relative(REPO_ROOT, BRAND_TOKENS)} not found, using the default look.\n` +
+        '         Write it from marketing/brand/brand-guidelines.md (general-companySetup) to apply the brand.'
+    );
+    warnedDefaultTokens = true;
+  }
+  return fs.readFileSync(DEFAULT_TOKENS, 'utf8');
 }
 
 function resolveOutputPath(inputPath) {
@@ -43,22 +61,11 @@ function resolveOutputPath(inputPath) {
   return path.join(path.dirname(absInput), basename);
 }
 
-function buildHtml(markdown, title, themeName) {
+function buildHtml(markdown, title) {
   const body = marked.parse(markdown);
   const wrapper = readAsset('wrapper.html');
-  let styles = readAsset('one-pager-print.css').replaceAll('{{COMPANY_DOMAIN}}', readCompanyDomain());
-
-  if (themeName) {
-    const themePath = path.join(THEMES_DIR, `${themeName}.css`);
-    if (!fs.existsSync(themePath)) {
-      const available = fs.readdirSync(THEMES_DIR)
-        .filter((f) => f.endsWith('.css'))
-        .map((f) => path.basename(f, '.css'))
-        .join(', ');
-      throw new Error(`Theme "${themeName}" not found. Available: ${available}`);
-    }
-    styles += '\n' + fs.readFileSync(themePath, 'utf8');
-  }
+  const layout = readAsset('one-pager-print.css').replaceAll('{{COMPANY_DOMAIN}}', readCompanyDomain());
+  const styles = readBrandTokens() + '\n' + layout;
 
   return wrapper
     .replace('{{TITLE}}', title)
@@ -66,7 +73,7 @@ function buildHtml(markdown, title, themeName) {
     .replace('{{BODY}}', body);
 }
 
-async function exportPdf(inputPath, themeName) {
+async function exportPdf(inputPath) {
   const absInput = path.resolve(inputPath);
 
   if (!fs.existsSync(absInput)) {
@@ -79,7 +86,7 @@ async function exportPdf(inputPath, themeName) {
 
   const markdown = fs.readFileSync(absInput, 'utf8');
   const title = path.basename(absInput, '.md');
-  const html = buildHtml(markdown, title, themeName);
+  const html = buildHtml(markdown, title);
   const outputPath = resolveOutputPath(absInput);
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -87,7 +94,8 @@ async function exportPdf(inputPath, themeName) {
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'load' });
+    await page.setContent(html, { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
     await page.pdf({
       path: outputPath,
       format: 'Letter',
@@ -102,14 +110,11 @@ async function exportPdf(inputPath, themeName) {
 }
 
 function parseArgs(args) {
-  let theme = null;
   let allOnePagers = false;
   const files = [];
 
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--theme' && i + 1 < args.length) {
-      theme = args[++i];
-    } else if (args[i] === '--all-one-pagers') {
+    if (args[i] === '--all-one-pagers') {
       allOnePagers = true;
     } else {
       files.push(args[i]);
@@ -117,9 +122,9 @@ function parseArgs(args) {
   }
 
   if (args.length === 0) {
-    console.error('Usage: node export-pdf.js [--theme <name>] <file.md> [file2.md ...]');
-    console.error('       node export-pdf.js [--theme <name>] --all-one-pagers');
-    console.error('Themes: ocean, indigo, crimson, gold, slate (default: green/teal)');
+    console.error('Usage: node export-pdf.js <file.md> [file2.md ...]');
+    console.error('       node export-pdf.js --all-one-pagers');
+    console.error('Colors and fonts come from marketing/brand/brand-tokens.css (default look if it is missing).');
     process.exit(1);
   }
 
@@ -132,14 +137,14 @@ function parseArgs(args) {
       .filter((name) => name.endsWith('.md'))
       .map((name) => path.join(ONE_PAGER_DIR, name))
       .sort();
-    return { theme, files: onePagerFiles };
+    return { files: onePagerFiles };
   }
 
-  return { theme, files: files.map((f) => path.resolve(f)) };
+  return { files: files.map((f) => path.resolve(f)) };
 }
 
 async function main() {
-  const { theme, files } = parseArgs(process.argv.slice(2));
+  const { files } = parseArgs(process.argv.slice(2));
 
   if (files.length === 0) {
     console.error('No markdown files matched.');
@@ -149,12 +154,12 @@ async function main() {
   const outputs = [];
 
   for (const input of files) {
-    const output = await exportPdf(input, theme);
+    const output = await exportPdf(input);
     outputs.push({ input, output });
-    console.log(`Exported: ${output}${theme ? ` [${theme}]` : ''}`);
+    console.log(`Exported: ${output}`);
   }
 
-  console.log(`\nDone — ${outputs.length} PDF${outputs.length === 1 ? '' : 's'} generated.`);
+  console.log(`\nDone: ${outputs.length} PDF${outputs.length === 1 ? '' : 's'} generated.`);
 }
 
 main().catch((err) => {

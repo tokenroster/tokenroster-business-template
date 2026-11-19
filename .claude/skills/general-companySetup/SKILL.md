@@ -1,5 +1,5 @@
 ---
-name: tokenroster-company-setup
+name: general-companySetup
 description: >
   Runs first-time setup of this workspace template for a real company. Walks the user
   through setup-questionnaire.md (or reads it if already filled in) for company basics
@@ -21,7 +21,7 @@ and keeps it from being skipped or done half-way.
 
 ---
 
-## Step 1 — Get the questionnaire answered
+## Step 1: Get the questionnaire answered
 
 Read `setup-questionnaire.md` at the repo root. Each numbered question needs an answer
 written inline beneath it. Note that this questionnaire collects company facts, not
@@ -68,7 +68,7 @@ entirely in Step 4.
 
 ---
 
-## Step 2 — Write `company.json` and resolve the placeholders
+## Step 2: Write `company.json` and resolve the placeholders
 
 Write `company.json` at the repo root from the answered questionnaire:
 
@@ -79,8 +79,8 @@ Write `company.json` at the repo root from the answered questionnaire:
 }
 ```
 
-This is the only place the name and domain live for tooling. The skills (`one-pager`,
-`md-to-pdf`, `pitch-deck`) read it at runtime, so **never edit anything under
+This is the only place the name and domain live for tooling. The skills (`general-onePager`,
+`general-mdToPdf`, `general-pitchDeck`) read it at runtime, so **never edit anything under
 `.claude/skills/` during setup**. Keeping skills identical to the template is what lets
 template updates merge cleanly later. Only add fields to `company.json` when a script or
 skill actually reads them.
@@ -102,16 +102,17 @@ render-time tokens the scripts fill themselves, leave them alone.
 
 ---
 
-## Step 3 — Fill in `CLAUDE.md`
+## Step 3: Fill in `CLAUDE.md`
 
-Replace `{{COMPANY}}` and the three persona-name placeholders throughout. Using Q11/Q12,
-either fill in or delete the bracketed house-style line and the sales brand-prefix
+Replace `{{COMPANY}}` and the three persona-name placeholders throughout. The em dash ban
+and the writing guide are fixed rules, leave them. Add any extra house-style rules from Q11
+to "General rules", and from Q12 either fill in or delete the sales brand-prefix
 exception. Delete the top blockquote setup note once every placeholder in the file is
 resolved.
 
 ---
 
-## Step 4 — Derive and generate the three personas
+## Step 4: Derive and generate the three personas
 
 The user only gave company facts (Q1-4), everything else here is Claude's inference, not
 theirs to supply. For each of `strategy/AGENT.md`, `marketing/AGENT.md`, `sales/AGENT.md`,
@@ -150,53 +151,63 @@ work in two passes:
 
 ---
 
-## Step 5 — Decide on a shared numbers file
+## Step 5: Fill in `platform-stats.md`
 
-From Q10: if stats, pricing, or contact info will repeat across more than one document,
-create `key-numbers.md` at the repo root per the pattern `CLAUDE.md`'s "Key numbers"
-section describes, and note any live API/database source there. If nothing repeats yet,
-skip it, don't create a file with nothing to centralize.
+`platform-stats.md` at the repo root already exists as a skeleton. From Q10 (and anything
+the website check found), fill in traction, pricing, product facts, partnerships, and
+contact details, set "Last updated" to today, and record any live API or database source
+in its "Live sources" table. Leave anything unknown as `TBD`; never invent a figure. Delete
+its setup blockquote once at least one real number is in.
 
 ---
 
-## Step 6 — Write `marketing/brand/brand-guidelines.md`
+## Step 6: Write `marketing/brand/brand-guidelines.md`
 
 This file doesn't exist in the template, Q5–9 are its source material: name usage, logo
 rules (once real logo SVGs are available), color tokens (light + dark if applicable),
 typography, and voice/tone in 3-5 words plus words to avoid. Follow the file list
 `marketing/brand/README.md` already promises (`brand-guidelines.md` + `logos/`). If the
 user has logo files, ask them to place `wordmark.svg`, `mark-tile.svg`, and `mark-ink.svg`
-in `marketing/brand/logos/`, that's what the pitch-deck skill expects by name.
+in `marketing/brand/logos/`, that's what the general-pitchDeck skill expects by name.
+
+Then write `marketing/brand/brand-tokens.css`, the machine-readable twin of the guidelines
+that the PDF and deck engines render with. Copy the variable list from
+`.claude/skills/general-mdToPdf/assets/default-brand-tokens.css` (don't edit that file) and
+fill every `--brand-*` value from the guidelines: one accent with a stronger shade and a
+light tint, ink shades for text, paper and surface colors, a border color, and the
+display/body/mono font stacks. If the fonts are web fonts, put their `@import` as the first
+line. Keep it in sync with `brand-guidelines.md` from then on: the guidelines are the
+source, the tokens follow. If the user has no brand colors or fonts yet, skip this file,
+the engines fall back to the default look and say so.
 
 Do not create any sales or marketing collateral before this file exists, per `CLAUDE.md`.
 
 ---
 
-## Step 7 — Finish up, keep the skeleton intact
+## Step 7: Finish up, keep the skeleton intact
 
 - Never delete any file or folder of the skeleton project during setup. That includes
-  the empty placeholder folders (`strategy/business-plan/`, `strategy/executive-summary/`,
-  `strategy/competitive-analysis/`, `marketing/website-copy/`, `sales/1-pager/output/`,
-  `sales/emails/drafts/`, `sales/pitch-deck/generation/assets/`,
-  `sales/pitch-deck/output/`) and their `.gitkeep` files, the READMEs, `AGENT.md` files,
+  the empty placeholder folders (every folder that holds only a `.gitkeep`, e.g.
+  `strategy/projections/`, `marketing/channels/website/`, `sales/accounts/`,
+  `sales/collateral/1-pager/output/`) and their `.gitkeep` files, the READMEs, `AGENT.md` files,
   skills, and `setup-questionnaire.md` itself. Setup only edits text inside content files
-  (never skills) and fills in or adds new ones (`company.json`, `brand-guidelines.md`,
-  `key-numbers.md`). Don't offer to remove anything. The skills' own remaining setup
+  (never skills) and fills in or adds new ones (`company.json`, `platform-stats.md`,
+  `brand-guidelines.md`, `brand-tokens.css`). Don't offer to remove anything. The skills' own remaining setup
   (installing dependencies, adding logo SVGs) is left to the user, each skill's SKILL.md
   covers it.
 - Update each affected folder's `README.md` if a naming convention changed (e.g. the
   sales brand-prefix decision from Q12), per `CLAUDE.md`'s README rule. Don't create new
   READMEs, only update the ones that already exist.
 - Once every `{{PLACEHOLDER}}` outside `.claude/skills/` is resolved, delete the setup blockquote at the
-  top of `README.md` and the "template/README.md" pointer line at the top of `CLAUDE.md`.
+  top of `README.md` and the setup blockquote at the top of `CLAUDE.md`.
 
 ---
 
-## Step 8 — Report back
+## Step 8: Report back
 
 List what was filled in (including the `company.json` values), the persona each folder ended up with (name + one line each),
-what was deliberately skipped (e.g. no shared numbers file yet, folders left as
-placeholders), and anything still blocked on the user (missing logo files, an undecided
+what was deliberately skipped (e.g. stats still `TBD`, no `brand-tokens.css` yet, folders
+left as placeholders), and anything still blocked on the user (missing logo files, an undecided
 house style rule). Re-run a `{{` search excluding `.claude/` before declaring done, a
 single missed placeholder is the most common failure mode here. Also run
 `git status -- .claude/skills` and confirm it shows no changes.

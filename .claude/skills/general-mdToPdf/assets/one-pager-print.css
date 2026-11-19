@@ -1,20 +1,19 @@
-/* Default one-pager theme — Helvetica, navy + teal, green tables.
-   This is a working example palette, not a brand spec. Once you have
-   marketing/brand/brand-guidelines.md, either replace these tokens with
-   your brand's colors/typeface or point at one of assets/themes/*.css.
-   Pick ONE accent treatment and use it consistently, don't let every new
-   document invent its own color scheme. */
+/* One-pager print layout. Owns layout only: every color and font comes from the
+   brand tokens (--brand-*), which export-pdf.js loads first from
+   marketing/brand/brand-tokens.css, or from assets/default-brand-tokens.css until the
+   company has one. To change the look, change the tokens, not this file. The local
+   aliases below map the tokens onto this layout's roles. */
 
 :root {
-  --navy: #0d1b2a;
-  --teal: #0e7c7b;
-  --green-dark: #0a5c5b;
-  --green-mid: #0e7c7b;
-  --green-light: #e6f5f4;
-  --green-lighter: #f3faf9;
-  --body: #4a5568;
-  --footer: #94a3b8;
-  --rule: #0a5c5b;
+  --heading: var(--brand-ink);
+  --accent: var(--brand-accent);
+  --accent-strong: var(--brand-accent-strong);
+  --tint: var(--brand-accent-tint);
+  --tint-soft: color-mix(in srgb, var(--brand-accent-tint) 45%, #ffffff);
+  --body: var(--brand-ink-secondary);
+  --footer: var(--brand-ink-tertiary);
+  --rule: var(--brand-accent-strong);
+  --line: var(--brand-border);
 }
 
 @page {
@@ -36,7 +35,7 @@ body {
   padding: 0;
   background: #ffffff;
   color: var(--body);
-  font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--brand-font-body);
   font-size: 8.5pt;
   line-height: 1.45;
   font-weight: 400;
@@ -48,11 +47,12 @@ body {
 
 /* Document header */
 .document > h1:first-child {
+  font-family: var(--brand-font-display);
   font-size: 26pt;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 0 0 6px;
-  color: var(--navy);
+  color: var(--heading);
   line-height: 1.1;
   text-align: left;
   page-break-after: avoid;
@@ -61,7 +61,7 @@ body {
 .document > h1:first-child + h3 {
   font-size: 13pt;
   font-weight: 400;
-  color: var(--teal);
+  color: var(--accent);
   margin: 0 0 6px;
   line-height: 1.35;
   text-align: left;
@@ -83,9 +83,10 @@ body {
 
 /* Section headings */
 h2 {
+  font-family: var(--brand-font-display);
   font-size: 13pt;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--heading);
   margin: 7px 0 3px;
   padding: 0;
   border: none;
@@ -94,9 +95,10 @@ h2 {
 }
 
 h3 {
+  font-family: var(--brand-font-display);
   font-size: 11pt;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--heading);
   margin: 7px 0 3px;
   page-break-after: avoid;
 }
@@ -108,7 +110,7 @@ p {
 }
 
 em {
-  color: var(--teal);
+  color: var(--accent);
   font-style: italic;
   font-weight: 400;
 }
@@ -119,7 +121,7 @@ strong {
 }
 
 a {
-  color: var(--teal);
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -129,13 +131,13 @@ hr {
   height: 0;
 }
 
-/* Stats / callout — highlighted traction block */
+/* Stats callout: highlighted traction block */
 blockquote {
   margin: 4px 0;
   padding: 7px 12px;
-  background: var(--green-light);
-  border: 1px solid #b8dedc;
-  border-left: 4px solid var(--green-dark);
+  background: var(--tint);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-strong);
   border-radius: 4px;
   page-break-inside: avoid;
 }
@@ -144,57 +146,57 @@ blockquote p {
   margin: 0;
   font-size: 8.5pt;
   font-style: normal;
-  color: var(--green-dark);
+  color: var(--accent-strong);
   font-weight: 600;
 }
 
-/* Tables — dark green header, alternating light green rows */
+/* Tables: accent header, alternating tinted rows */
 table {
   width: 100%;
   border-collapse: collapse;
   margin: 2px 0 5px;
   font-size: 8.5pt;
   page-break-inside: avoid;
-  border: 1px solid #b8dedc;
+  border: 1px solid var(--line);
   border-radius: 4px;
   overflow: hidden;
 }
 
 thead th {
-  background: var(--green-dark);
-  color: #ffffff;
+  background: var(--accent-strong);
+  color: var(--brand-on-accent);
   font-weight: 700;
   font-size: 10pt;
   text-align: left;
   padding: 5px 8px;
-  border: 1px solid var(--green-dark);
+  border: 1px solid var(--accent-strong);
 }
 
 tbody td {
   padding: 4px 8px;
-  border: 1px solid #c5e8e6;
+  border: 1px solid var(--line);
   vertical-align: top;
   color: var(--body);
   font-size: 8.5pt;
 }
 
 tbody tr:nth-child(odd) td {
-  background: var(--green-light);
+  background: var(--tint);
 }
 
 tbody tr:nth-child(even) td {
-  background: var(--green-lighter);
+  background: var(--tint-soft);
 }
 
 tbody td:first-child {
   font-weight: 500;
-  color: var(--navy);
+  color: var(--heading);
   width: auto;
 }
 
 tbody td strong {
   font-weight: 700;
-  color: var(--navy);
+  color: var(--heading);
 }
 
 /* Step / feature labels */
@@ -203,17 +205,17 @@ p > strong:first-child {
   color: var(--body);
 }
 
-/* CTA contact line — matches a paragraph containing a link to your own
+/* CTA contact line: matches a paragraph containing a link to your own
    domain, so the closing contact line gets accent styling. The domain
    token is a render-time token: export-pdf.js fills it from company.json,
    don't replace it by hand. */
 .document p:has(a[href*='{{COMPANY_DOMAIN}}']) {
-  color: var(--teal);
+  color: var(--accent);
   font-size: 8.5pt;
 }
 
 .document p:has(a[href*='{{COMPANY_DOMAIN}}']) strong {
-  color: var(--teal);
+  color: var(--accent);
   font-weight: 400;
 }
 

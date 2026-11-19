@@ -1,0 +1,17 @@
+{
+  "_readme": "Copy this file to .claude/settings.local.json (git-ignored) and adjust it to your own workflow. It layers personal overrides on top of the team-wide .claude/settings.json. Merge into these arrays, don't replace them wholesale. guard-read-paths.js and guard-bash-paths.js in .claude/settings.json still restrict every tool call to paths inside the project root regardless of what you allow here. The two TokenRoster MCP servers come from .mcp.json and sign in with OAuth (run /mcp and choose Authenticate on first use), so no API key goes in this file.",
+  "enabledMcpjsonServers": ["tokenroster", "tokenroster-manage"],
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git show*)",
+      "Bash(npm install)",
+      "Bash(npm run *)",
+      "Bash(node *)",
+      "mcp__tokenroster"
+    ]
+  }
+}

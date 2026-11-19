@@ -1,25 +1,24 @@
-/* Default deck theme — paper/ink surfaces, one cobalt accent, Space
-   Grotesk/Outfit/IBM Plex Mono. This is a working example, not a brand
-   spec. Once you have marketing/brand/brand-guidelines.md, replace the
-   tokens below with your own. If you change the font families, also
-   update the Google Fonts <link> in scripts/deck-kit.js so the right
-   weights load. Keep it to one accent color, that's the point of this
-   engine: hierarchy through opacity, not extra hues. */
+/* Deck layout. Owns layout only: every color and font comes from the brand tokens
+   (--brand-*), which deck-kit.js loads first from marketing/brand/brand-tokens.css, or
+   from assets/default-brand-tokens.css until the company has one. To change the look,
+   change the tokens, not this file. Keep it to one accent color, that's the point of
+   this engine: hierarchy through opacity, not extra hues. */
 @page { size: 13.333in 7.5in; margin: 0; }
 
 :root {
-  --paper: #f1ede3;
-  --paper-section: #e9e4d9;
-  --surface: #ffffff;
-  --ink: #1a1a17;
-  --ink-secondary: #5c5b54;
-  --ink-tertiary: #86847d;
-  --accent: #243c7a;
-  --accent-hover: #2e4a93;
-  --border: #dad5c9;
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'Outfit', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --paper: var(--brand-paper);
+  --paper-section: var(--brand-paper-section);
+  --surface: var(--brand-surface);
+  --ink: var(--brand-ink);
+  --ink-secondary: var(--brand-ink-secondary);
+  --ink-tertiary: var(--brand-ink-tertiary);
+  --accent: var(--brand-accent);
+  --accent-hover: var(--brand-accent-strong);
+  --on-accent: var(--brand-on-accent);
+  --border: var(--brand-border);
+  --font-display: var(--brand-font-display);
+  --font-body: var(--brand-font-body);
+  --font-mono: var(--brand-font-mono);
 }
 
 * { box-sizing: border-box; }
@@ -162,7 +161,7 @@ body { font-family: var(--font-body); color: var(--ink); }
 .flow-col { display: flex; flex-direction: column; align-items: stretch; gap: 0.14in; }
 .flow-box {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--on-accent);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 15pt;

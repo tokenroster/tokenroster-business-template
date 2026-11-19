@@ -1,0 +1,42 @@
+/* Default brand tokens: the fallback look used until the company has its own.
+
+   Lookup order (both general-mdToPdf and general-pitchDeck):
+     1. marketing/brand/brand-tokens.css   the company's brand, written from
+                                           brand-guidelines.md by general-companySetup
+     2. this file                          neutral default, used with a console warning
+
+   Never edit this file to apply a company's brand. Write
+   marketing/brand/brand-tokens.css instead, with the same variable names, so the
+   skills stay generic and template updates merge cleanly.
+
+   This file is duplicated in general-mdToPdf/assets/ and general-pitchDeck/assets/ so
+   each skill can be copied on its own. Keep the two copies identical.
+
+   Contract: a brand-tokens.css must define every variable below. An @import for web
+   fonts, if any, must be the first statement in the file. */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Surfaces */
+  --brand-paper: #f1ede3;          /* slide / page background */
+  --brand-paper-section: #e9e4d9;  /* alternate section background */
+  --brand-surface: #ffffff;        /* cards, panels */
+  --brand-border: #dad5c9;         /* hairlines, table borders */
+
+  /* Text */
+  --brand-ink: #1a1a17;            /* headings, primary text */
+  --brand-ink-secondary: #5c5b54;  /* body copy */
+  --brand-ink-tertiary: #86847d;   /* captions, footers, axis labels */
+
+  /* The single accent */
+  --brand-accent: #243c7a;         /* links, highlights, charts */
+  --brand-accent-strong: #1b2f61;  /* table headers, rules, emphasis */
+  --brand-accent-tint: #e6eaf4;    /* callout and table-row backgrounds */
+  --brand-on-accent: #ffffff;      /* text placed on --brand-accent */
+
+  /* Type */
+  --brand-font-display: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --brand-font-body: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+  --brand-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace;
+}

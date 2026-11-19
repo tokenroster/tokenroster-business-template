@@ -3,15 +3,16 @@
 
 // Shared engine for the company's pitch decks: brand-compliant slide HTML
 // helpers + PDF rendering + QA screenshots. A per-deck script (e.g.
-// sales/pitch-deck/generation/generate-deck.js) requires this, builds an array
+// sales/collateral/pitch-deck/generation/generate-deck.js) requires this, builds an array
 // of slide HTML strings using the helpers below, then calls buildHtml()
 // and renderPdf()/screenshotSlides().
 //
-// Path layout this file assumes (mirrors md-to-pdf):
-//   <repo root>/.claude/skills/pitch-deck/scripts/deck-kit.js  (this file)
-//   <repo root>/.claude/skills/md-to-pdf/scripts/node_modules/playwright  (reused, not reinstalled)
+// Path layout this file assumes (mirrors general-mdToPdf):
+//   <repo root>/.claude/skills/general-pitchDeck/scripts/deck-kit.js  (this file)
+//   <repo root>/.claude/skills/general-mdToPdf/scripts/node_modules/playwright  (reused, not reinstalled)
 //   <repo root>/marketing/brand/logos/*.svg
-//   <repo root>/company.json  (company name, written by tokenroster-company-setup)
+//   <repo root>/marketing/brand/brand-tokens.css  (optional; falls back to assets/default-brand-tokens.css)
+//   <repo root>/company.json  (company name, written by general-companySetup)
 //
 // Setup: put your three logo SVGs at the LOGOS path with the filenames
 // referenced below (or change the filenames here to match what you actually
@@ -27,7 +28,7 @@ function readCompanyName() {
   const companyPath = path.join(ROOT, 'company.json');
   const { name } = JSON.parse(fs.readFileSync(companyPath, 'utf8'));
   if (!name) {
-    throw new Error(`"name" is empty in ${companyPath}. Run the tokenroster-company-setup skill first.`);
+    throw new Error(`"name" is empty in ${companyPath}. Run the general-companySetup skill first.`);
   }
   return name;
 }
@@ -43,19 +44,27 @@ const wordmarkSvg = fs.readFileSync(path.join(LOGOS, 'wordmark.svg'), 'utf8');
 const markTileSvg = fs.readFileSync(path.join(LOGOS, 'mark-tile.svg'), 'utf8');
 const markInkSvg = fs.readFileSync(path.join(LOGOS, 'mark-ink.svg'), 'utf8');
 
-// Keep in sync with the --font-display/--font-body/--font-mono families in
-// assets/deck-theme.css, if you swap the theme's fonts, update this link too.
-const GOOGLE_FONTS_LINK =
-  '<link rel="preconnect" href="https://fonts.googleapis.com">' +
-  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
-  '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Outfit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">';
+// Brand tokens (colors + fonts, including any web-font @import): the company's
+// marketing/brand/brand-tokens.css if it exists, otherwise this skill's default look.
+const BRAND_TOKENS_PATH = path.join(ROOT, 'marketing', 'brand', 'brand-tokens.css');
+const DEFAULT_TOKENS_PATH = path.join(SKILL_DIR, 'assets', 'default-brand-tokens.css');
+let BRAND_TOKENS_CSS;
+if (fs.existsSync(BRAND_TOKENS_PATH)) {
+  BRAND_TOKENS_CSS = fs.readFileSync(BRAND_TOKENS_PATH, 'utf8');
+} else {
+  console.warn(
+    'Warning: marketing/brand/brand-tokens.css not found, using the default look.\n' +
+      '         Write it from marketing/brand/brand-guidelines.md (general-companySetup) to apply the brand.'
+  );
+  BRAND_TOKENS_CSS = fs.readFileSync(DEFAULT_TOKENS_PATH, 'utf8');
+}
 
 // ---- slide structure helpers ----------------------------------------------
 //
 // Every slide follows: slideOpen() -> title() [optional] -> body(...) -> slideClose.
 // title() is pinned near the top; body() fills and vertically centers
 // whatever's left, so slides read full without dead space at the bottom.
-// Never call title() and expect it inside body() — they're siblings.
+// Never call title() and expect it inside body(): they're siblings.
 
 function cornerMark() {
   return `<div class="corner-mark">${markTileSvg}</div>`;
@@ -90,7 +99,7 @@ function lineChart(label, points, w, h) {
   w = w || 560;
   h = h || 300;
   const max = Math.max(...points.map((p) => p.v)) * 1.12;
-  const padL = 34, padT = 14, padR = 8;
+  const padL = 34, padT = 14, padR = 22;
   const padB = 22;
   const plotW = w - padL - padR;
   const plotH = h - padT - padB;
@@ -206,7 +215,7 @@ function projectCard(logoDataUri, name, blurb, opts) {
 }
 
 // Captioned row of logo badges (e.g. "also evaluating" platforms). Sized
-// to read clearly, not as a small footnote — label stacked above a row of
+// to read clearly, not as a small footnote: a label stacked above a row of
 // larger badges. items: [{ src, alt }].
 function logoStrip(label, items) {
   const badges = items
@@ -235,8 +244,8 @@ function buildHtml(pageTitle, slidesHtmlArray) {
 <head>
 <meta charset="utf-8">
 <title>${pageTitle}</title>
-${GOOGLE_FONTS_LINK}
 <style>
+${BRAND_TOKENS_CSS}
 ${THEME_CSS}
 </style>
 </head>
@@ -271,7 +280,7 @@ async function renderPdf(html, outPath) {
 }
 
 // Screenshots every .slide element to <qaDir>/slide-NN.png. Use this for
-// QA instead of markitdown/soffice/pdftoppm — none of those are available
+// QA instead of markitdown/soffice/pdftoppm: none of those are available
 // in this environment. Look at every image before calling a deck done.
 async function screenshotSlides(html, qaDir) {
   const chromium = getChromium();
